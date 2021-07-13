@@ -1,0 +1,70 @@
+# 从外部项目查找并加载设置
+
+# 查找protobuf, 设置protobuf变量加到 CMAKE_PREFIX_PATH
+set(Protobuf_DIR ${PROJECT_SOURCE_DIR}/dep/protobuf3.14.0_build)
+set(Protobuf_Lib_DIR ${Protobuf_DIR}/lib)
+set(Protobuf_PREFIX_PATH
+	${Protobuf_DIR}/include
+	${Protobuf_DIR}/lib
+	${Protobuf_DIR}/bin
+)
+list(APPEND CMAKE_PREFIX_PATH ${Protobuf_PREFIX_PATH})
+
+# include(FindProtobuf)
+find_package(Protobuf)
+if(PROTOBUF_FOUND)
+# set(Protobuf_LIBRARY ${Protobuf_Lib_DIR}/libprotobuf.a)       # protobuf静态库
+# set(Protobuf_PROTOC_LIBRARY ${Protobuf_Lib_DIR}/libprotoc.a)
+#   message(STATUS "found protobuf")
+#   message(STATUS "CMAKE_PREFIX_PATH: ${CMAKE_PREFIX_PATH}")
+  # 下面几个变量最好区分大小写
+#   message(STATUS "PROTOBUF_INCLUDE_DIR: ${PROTOBUF_INCLUDE_DIR}")
+#   message(STATUS "PROTOBUF_PROTOC_LIBRARY: ${PROTOBUF_PROTOC_LIBRARY}")
+#   message(STATUS "PROTOBUF_PROTOC_LIBRARIES: ${PROTOBUF_PROTOC_LIBRARIES}")
+#   message(STATUS "PROTOBUF_LIBRARIES: ${PROTOBUF_LIBRARIES}")
+#   message(STATUS "PROTOBUF_LIBRARY: ${PROTOBUF_LIBRARY}")
+#   message(STATUS "PROTOBUF_PROTOC_EXECUTABLE: ${PROTOBUF_PROTOC_EXECUTABLE}")
+endif()
+
+
+find_package(Boost)
+find_package(CURL)
+find_package(ZLIB)
+find_path(CARES_INCLUDE_DIR ares.h)
+find_library(CARES_LIBRARY NAMES cares)
+find_path(MHD_INCLUDE_DIR microhttpd.h)
+find_library(MHD_LIBRARY NAMES microhttpd)
+find_library(BOOSTTEST_LIBRARY NAMES boost_unit_test_framework)
+find_library(BOOSTPO_LIBRARY NAMES boost_program_options)
+find_library(BOOSTSYSTEM_LIBRARY NAMES boost_system)
+find_path(TCMALLOC_INCLUDE_DIR gperftools/heap-profiler.h)
+find_library(TCMALLOC_LIBRARY NAMES tcmalloc_and_profiler)
+find_path(HIREDIS_INCLUDE_DIR hiredis/hiredis.h)
+find_library(HIREDIS_LIBRARY NAMES hiredis)
+find_path(GD_INCLUDE_DIR gd.h)
+find_library(GD_LIBRARY NAMES gd)
+find_program(THRIFT_COMPILER thrift)
+find_path(THRIFT_INCLUDE_DIR thrift)
+find_library(THRIFT_LIBRARY NAMES thrift)
+
+if(CARES_INCLUDE_DIR AND CARES_LIBRARY)
+  message(STATUS "found cares")
+endif()
+if(CURL_FOUND)
+  message(STATUS "found curl")
+endif()
+if(TCMALLOC_INCLUDE_DIR AND TCMALLOC_LIBRARY)
+  message(STATUS "found tcmalloc")
+endif()
+if(ZLIB_FOUND)
+  message(STATUS "found zlib")
+endif()
+if(HIREDIS_INCLUDE_DIR AND HIREDIS_LIBRARY)
+  message(STATUS "found hiredis")
+endif()
+if(GD_INCLUDE_DIR AND GD_LIBRARY)
+  message(STATUS "found gd")
+endif()
+if(THRIFT_COMPILER AND THRIFT_INCLUDE_DIR AND THRIFT_LIBRARY)
+  message(STATUS "found thrift")
+endif()

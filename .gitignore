@@ -1,0 +1,14 @@
+build/debug/
+build/pb/
+cscope*
+.ycm_extra_conf.py
+.clangd/
+*.log
+tags
+dep/cmake-3.19.2-Linux-x86_64/
+dep/protobuf3.14.0_build/
+core.*
+.vscode/*
+
+
+
