@@ -64,9 +64,8 @@ void ProtobufCodecLite::onMessage(const TcpConnectionPtr& conn,
 {
   while (buf->readableBytes() >= static_cast<uint32_t>(kMinMessageLen+kHeaderLen))
   {
-    LOG_DEBUG << buf->toStringPiece();
     const int32_t len = buf->peekInt32();
-    LOG_DEBUG << "len:" << len << ", " << buf->toStringPiece();
+    // LDBG("M_NET") << len << ", " << buf->toStringPiece();
     if (len > kMaxMessageLen || len < kMinMessageLen)
     {
       errorCallback_(conn, buf, receiveTime, kInvalidLength);

@@ -67,7 +67,7 @@ EventLoop::EventLoop()
   , m_wakeupChannel(NEW Channel(this, m_wakeupFd))
   , m_currentActiveChannel(nullptr)
 {
-  LOG_DEBUG << "EventLoop created " << this << " int thread " << m_threadId;
+  LOG_DEBUG << "EventLoop created " << this;
   if (t_loopInThisThread)                               // 一个线程最多只能有一个EventLoop
   {
     LOG_FATAL << "Another EventLoop " << t_loopInThisThread << " exists in this thread " << m_threadId;

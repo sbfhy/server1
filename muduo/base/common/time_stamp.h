@@ -31,7 +31,7 @@ public:
     return static_cast<time_t>(m_microSecondsSinceEpoch / kMicroSecondsPerSecond); 
   }
 
-  static TimeStamp now();                                     // 当前时间戳(微秒), 调用gettimeofday(2),不是系统调用，不会陷入内核
+  static TimeStamp now();                                     // 当前时间戳, 调用gettimeofday(2),不是系统调用，不会陷入内核
   static TimeStamp invalid() { return TimeStamp(); }          // 无效时间戳，0
   static TimeStamp fromUnixTime(time_t t) { return fromUnixTime(t, 0); }  // 将time_t格式的时间戳转换成TimeStamp格式
   static TimeStamp fromUnixTime(time_t t, SDWORD microSeconds) {            // 

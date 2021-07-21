@@ -1,10 +1,12 @@
 #include "src/gameserver/gameserver.h"
 
+#include <memory>
+
 int main(int argc, char* argv[])
 {
-    GameServer server;
-    server.Start();
-    server.Run();
+    std::shared_ptr<GameServer> server = std::make_shared<GameServer>();
+    server->Start();
+    server->Run();
 
     return 0;
 }

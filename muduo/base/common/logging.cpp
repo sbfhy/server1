@@ -28,6 +28,7 @@ Logger::LogLevel initLogLevel()                         // 默认从环境变量
 {
   // FIXME 暂时修改
   return Logger::DEBUG;
+  //   return Logger::TRACE;
   // if (::getenv("MUDUO_LOG_TRACE"))
   //   return Logger::TRACE;
   // else if (::getenv("NUDUO_LOG_DEBUG"))

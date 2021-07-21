@@ -130,7 +130,8 @@ class EventLoop;
 class RpcChannel : public ::google::protobuf::RpcChannel
 {
  public:
-  typedef std::map<std::string, ::google::protobuf::Service*> ServiceMap;
+  typedef std::shared_ptr<::google::protobuf::Service> ServicePtr;
+  typedef std::map<std::string, ServicePtr> ServiceMap;
 
   RpcChannel();
 

@@ -48,10 +48,9 @@ private:
   {
     EventLoop loop;
     InetAddress listenAddr(9981);
-    sudoku::SudokuServiceImpl impl;
     RpcServer server(m_mainLoop, &loop, listenAddr);
     server.setThreadNum(1);
-    server.registerService(&impl);
+    // server.registerService(std::make_shared<sudoku::SudokuServiceImpl>());
     server.start();
     loop.Loop();
   }

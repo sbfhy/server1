@@ -100,9 +100,8 @@ void RpcChannel::onRpcMessage(const TcpConnectionPtr& conn,
                               TimeStamp receiveTime)
 {
   assert(conn == conn_);
-  //printf("%s\n", message.DebugString().c_str());
   RpcMessage& message = *messagePtr;
-  LOG_TRACE << "RpcChannel::onRpcMessage " << message.DebugString();
+//   LDBG("M_NET") << message.DebugString();
   if (message.type() == MSGTYPE_RESPONSE)
   {
     int64_t id = message.id();
@@ -187,7 +186,7 @@ void RpcChannel::callServiceMethod(const RpcMessage& message)   // 处理request
     ServiceMap::const_iterator it = services_->find(message.service());
     if (it != services_->end())
     {
-      google::protobuf::Service* service = it->second;
+      ServicePtr service = it->second;
       assert(service != NULL);
       const google::protobuf::ServiceDescriptor* desc = service->GetDescriptor();
       const google::protobuf::MethodDescriptor* method
@@ -198,12 +197,13 @@ void RpcChannel::callServiceMethod(const RpcMessage& message)   // 处理request
         ::google::protobuf::MessagePtr request(service->GetRequestPrototype(method).New());
         if (request->ParseFromString(message.request()))
         {
-          int64_t id = message.id();
-          ::google::protobuf::Message *response = service->GetResponsePrototype(method).New();
-          // response is deleted in doneCallbac
-          service->CallMethod(method, nullptr, get_pointer(request), response,
-                              NewCallback(this, &RpcChannel::doneCallbackInIoLoop, response, id));
-          errorCode = ERR_NO_ERROR;
+            LDBG("M_NET") << request->ShortDebugString();
+            int64_t id = message.id();
+            ::google::protobuf::Message *response = service->GetResponsePrototype(method).New();
+            // response is deleted in doneCallbac
+            service->CallMethod(method, nullptr, get_pointer(request), response,
+                                NewCallback(this, &RpcChannel::doneCallbackInIoLoop, response, id));
+            errorCode = ERR_NO_ERROR;
         }
       }
       else
@@ -252,13 +252,14 @@ void RpcChannel::doneCallbackInIoLoop(::google::protobuf::Message* response,
 void RpcChannel::doneCallback(::google::protobuf::Message* response,
                               int64_t id)
 {
-  // FIXME: can we move serialization to IO thread?
-  ::google::protobuf::MessagePtr d(response);
-  RpcMessage message;
-  message.set_type(MSGTYPE_RESPONSE);
-  message.set_id(id);
-  message.set_response(response->SerializeAsString()); // FIXME: error check
-  codec_.send(conn_, message);
-  LOG_DEBUG << "size:" << message.ByteSizeLong() << ", " << message.ShortDebugString();
+    if (!response) return ;
+    // FIXME: can we move serialization to IO thread?
+    ::google::protobuf::MessagePtr d(response);
+    RpcMessage message;
+    message.set_type(MSGTYPE_RESPONSE);
+    message.set_id(id);
+    message.set_response(response->SerializeAsString()); // FIXME: error check
+    codec_.send(conn_, message);
+    LDBG("M_NET") << response->ShortDebugString();
 }
 

@@ -4,7 +4,7 @@
 #include "muduo/base/define/define_new.h"
 
 template <typename T>
-class Singleton : public noncopyable
+class Singleton : public muduo::noncopyable
 {
 protected:
     Singleton() = default;

@@ -3,8 +3,6 @@
 #include <algorithm>
 #include <stdint.h>
 
-namespace muduo
-{
 
 typedef unsigned int DWORD;
 typedef int SDWORD;
@@ -19,5 +17,4 @@ typedef long long SQWORD;
 typedef float FLOAT;
 typedef double DOUBLE;
 
-} // namespace muduo
 

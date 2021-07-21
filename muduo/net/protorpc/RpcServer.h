@@ -42,8 +42,16 @@ class RpcServer
     server_.setThreadNum(numThreads);
   }
 
+  typedef std::shared_ptr<::google::protobuf::Service> ServicePtr;
+  typedef std::map<std::string, ServicePtr> ServiceMap;
+
   // NOT thread safe, must call before start().
-  void registerService(::google::protobuf::Service*);
+  void setServices(const ServiceMap* services)
+  {
+    services_ = services;
+  }
+//   void registerService(ServicePtr);
+
   void start();
 
  private:
@@ -56,7 +64,8 @@ class RpcServer
   std::shared_ptr<EventLoop> m_mainLoop{nullptr};
   // EventLoop* loop_;
   TcpServer server_;
-  std::map<std::string, ::google::protobuf::Service*> services_;
+
+  const ServiceMap*  services_;
   // RpcServiceImpl metaService_;
 };
 

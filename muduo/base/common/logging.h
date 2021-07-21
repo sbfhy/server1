@@ -127,6 +127,13 @@ if (good)
 #define LOG_SYSERR   muduo::Logger(__FILE__, __LINE__, false).stream()
 #define LOG_SYSFATAL muduo::Logger(__FILE__, __LINE__, true).stream()
 
+// 自定义的Log
+#define LDBG(env)                               \
+    static const char* envValue = getenv(env);  \
+    if (envValue != nullptr)                    \
+        LOG_DEBUG 
+
+
 
 const CHAR* strerror_tl(SDWORD savedErrno);
 

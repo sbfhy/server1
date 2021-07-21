@@ -1,3 +1,4 @@
+#pragma once
 
 
 class Assets 
@@ -5,4 +6,4 @@ class Assets
 
 private:
 
-}
+};

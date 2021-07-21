@@ -33,9 +33,8 @@ int main()
   LOG_INFO << "pid = " << getpid();
   EventLoop loop;
   InetAddress listenAddr(9981);
-  sudoku::SudokuServiceImpl impl;
   RpcServer server(&loop, listenAddr);
-  server.registerService(&impl);
+//   server.registerService(std::make_shared<sudoku::SudokuServiceImpl>());
   server.start();
   loop.Loop();
 }
