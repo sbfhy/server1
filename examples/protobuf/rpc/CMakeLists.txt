@@ -6,18 +6,21 @@
 
 add_executable(protobuf_rpc_sudoku_client client.cc)
 # set_target_properties(protobuf_rpc_sudoku_client PROPERTIES COMPILE_FLAGS "-Wno-error=shadow")
-target_link_libraries(protobuf_rpc_sudoku_client myproto muduo_protorpc)
+target_link_libraries(protobuf_rpc_sudoku_client myproto src_base)
+
+add_executable(client2 client2.cpp sudokuservice_stub.cpp)
+target_link_libraries(client2 myproto src_base)
 
 add_executable(protobuf_rpc_sudoku_server server.cc)
 # set_target_properties(protobuf_rpc_sudoku_server PROPERTIES COMPILE_FLAGS "-Wno-error=shadow")
-target_link_libraries(protobuf_rpc_sudoku_server myproto muduo_protorpc)
+target_link_libraries(protobuf_rpc_sudoku_server myproto src_base)
 
-add_executable(protobuf_rpc_sudoku_server2 server2.cc)
-target_link_libraries(protobuf_rpc_sudoku_server2 myproto muduo_protorpc)
+add_executable(server2 server2.cc sudokuservice.cpp)
+target_link_libraries(server2 myproto src_base)
 
 # add_custom_target(protobuf_rpc_all
 #                   DEPENDS
-#                         muduo_protorpc
+#                         src_base
 #                         protobuf_rpc_balancer
 #                         protobuf_rpc_balancer_raw
 #                         protobuf_rpc_echo_client

@@ -1,22 +1,65 @@
 #include "src/base/mgr/mgr_message.h"
 
-#include "src/gameserver/rpc/c2g_user.h"
+#include "muduo/base/common/logging.h"
+#include "src/base/mgr/dynamic_object.h"
+#include "src/base/mgr/mgr_dynamicfactory.h"
+#include "service.h"
 
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/service.h>
+#include "service/service_enum.pb.h"
+#include <google/protobuf/message.h>
 
 void MgrMessage::Wake()
 {
     registerService();
 }
 
-void MgrMessage::registerService(ServicePtr service)
+void MgrMessage::Init()
 {
-    const google::protobuf::ServiceDescriptor *desc = service->GetDescriptor();
-    m_mapServices[desc->full_name()] = service;
 }
 
 void MgrMessage::registerService()
 {
-    registerService(std::make_shared<RPC::C2G_UserLoginServiceImpl>());
+    m_arrayService.fill(nullptr);
+    m_mapRequest2ServiceInfo.clear();
+
+    for (int serviceType = ENUM::SERVICETYPE_MIN + 1; serviceType < ENUM::SERVICETYPE_MAX; ++ serviceType)
+    {
+        std::string serviceTypeName = "RPC::" + ENUM::EServiceType_Name(serviceType);
+        ServicePtr ptrService = ServicePtr( MgrDynamicFactory::Instance().CreateService(serviceTypeName) );
+        // if (ENUM::EServiceType_IsValid(serviceType) && !ptrService)
+        // {
+        //     {LDBG("M_NET") << serviceTypeName << " 未注册";}
+        // }
+        if (!ptrService) continue;
+        const auto* serviceDesc = ptrService->GetDescriptor();
+        if (!serviceDesc) continue;
+
+        m_arrayService.at(serviceType) = ptrService;
+
+        for (int i = 0; i < serviceDesc->method_count(); ++ i)
+        {
+            const auto* requestDesc = ptrService->GetRequestPrototype(serviceDesc->method(i)).GetDescriptor();
+            if (!requestDesc) continue;
+            m_mapRequest2ServiceInfo[requestDesc] = SServiceInfo {
+                                                        static_cast<ENUM::EServiceType>(serviceType), 
+                                                        i
+                                                    };
+            {LDBG("M_NET") << "[service-注册method]" << serviceTypeName << ", " << serviceDesc->method(i)->name();}
+        }
+    }
+}
+
+const ServicePtr MgrMessage::GetServicePtr(ENUM::EServiceType serviceType) const
+{
+    if (!ENUM::EServiceType_IsValid(serviceType)) 
+        return nullptr;
+    return m_arrayService.at(serviceType);
+}
+
+const SServiceInfo *MgrMessage::GetServiceInfo(const ::google::protobuf::Descriptor *requestDesc) const
+{
+    const auto itFind = m_mapRequest2ServiceInfo.find(requestDesc);
+    if (itFind == m_mapRequest2ServiceInfo.end()) 
+        return nullptr;
+    return &itFind->second;
 }

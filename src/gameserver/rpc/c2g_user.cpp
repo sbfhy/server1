@@ -4,22 +4,21 @@
 
 using namespace RPC;
 
-void C2G_UserLoginServiceImpl::C2G_UserLogin(
-        ::PROTOBUF_NAMESPACE_ID::RpcController* controller,
-        const ::CMD::C2G_UserLoginArg* request,
-        ::CMD::C2G_UserLoginRes* response,
-        ::google::protobuf::Closure* done)
+
+C2G_UserLoginService::C2G_UserLoginService()
+{
+
+}
+
+void C2G_UserLoginService::C2G_UserLogin(const ::CMD::C2G_UserLoginArgPtr &request,
+                                         const ::CMD::C2G_UserLoginResPtr& response)
 {
     if (request)
     {
-        LDBG("M_NET") << request->ShortDebugString();
+        {LDBG("M_NET") << request->ShortDebugString();}
     }
     if (response)
     {
         response->set_allow_login(true);
-    }
-    if (done)
-    {
-        done->Run();
     }
 }

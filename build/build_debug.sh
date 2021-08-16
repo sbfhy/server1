@@ -21,7 +21,6 @@ export PATH=$projectDir/dep/cmake-3.19.2-Linux-x86_64/bin/:$PATH  # 使用项目
 CXX=${CXX:-g++}
 
 mkdir -p $buildTypeDir/bin/log
-mkdir -p $buildDir/pb
 
 cd $buildTypeDir                                  \
   && cmake                                        \
@@ -30,7 +29,8 @@ cd $buildTypeDir                                  \
            $projectDir                            \
   && make -j$(nproc) $*                           \
   # && make install
- 
+
+
 # proto 测试
 # $projectDir/dep/protobuf3.14.0_build/bin/protoc --plugin=protoc-gen-rpc=$buildTypeDir/bin/protoc-gen-rpc --cpp_out=$buildDir/pb --rpc_out=$buildDir/pb    $projectDir/myproto1/rpcservice.proto  -I$projectDir/myproto1 
 # $projectDir/dep/protobuf3.14.0_build/bin/protoc --plugin=protoc-gen-rpc=$buildTypeDir/bin/protoc-gen-rpc --cpp_out=$buildDir/pb --rpc_out=$buildDir/pb    $projectDir/myproto1/sudoku.proto  -I$projectDir/myproto1 

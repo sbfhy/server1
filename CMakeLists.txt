@@ -19,6 +19,8 @@ include(find_package)                                         # 查找依赖库
 
 # 添加包含目录 =================================
 include_directories(${PROJECT_SOURCE_DIR})
+include_directories(${PROJECT_SOURCE_DIR}/src/base)
+
 if(Boost_FOUND)
   include_directories(${Boost_INCLUDE_DIRS})
 endif()
@@ -33,7 +35,7 @@ include(build_proto)                                          # 编译pb
 
 
 # 添加需要构建的子目录 ==========================
-add_subdirectory(muduo/base)                                  
-add_subdirectory(muduo/net)
-add_subdirectory(examples)
+# add_subdirectory(muduo/base) 
+# add_subdirectory(muduo/net)
 add_subdirectory(src)
+add_subdirectory(examples)

@@ -1,8 +1,8 @@
-#include <sudoku.pb.h>
+#include "message/test/sudoku.pb.h"
 
-#include <muduo/base/common/logging.h>
-#include <muduo/net/common/eventloop.h>
-#include <muduo/net/protorpc/RpcServer.h>
+#include "muduo/base/common/logging.h"
+#include "muduo/net/common/eventloop.h"
+#include "muduo/net/protorpc/RpcServer.h"
 #include <unistd.h>
 
 using namespace muduo;
@@ -14,15 +14,14 @@ namespace sudoku
 class SudokuServiceImpl : public SudokuService
 {
 public:
-  virtual void Solve(::google::protobuf::RpcController* controller,
-                       const ::sudoku::SudokuRequest* request,
-                       ::sudoku::SudokuResponse* response,
-                       ::google::protobuf::Closure* done)
+  virtual void Solve(const ::sudoku::SudokuRequestPtr& request,
+                     const ::sudoku::SudokuResponsePtr& response)
   {
     LOG_INFO << "SudokuServiceImpl::Solve";
+    if (!response) return ;
     response->set_solved(true);
     response->set_checkerboard("1234567");
-    done->Run();
+    // done->Run();
   }
 };
 

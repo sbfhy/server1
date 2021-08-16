@@ -1,17 +1,19 @@
 #pragma once
 
 #include "service/c2g_user.pb.h"
-
-#define PROTOBUF_NAMESPACE_ID google::protobuf
+#include "src/base/mgr/create_service.h"
 
 namespace RPC {
-
-class C2G_UserLoginServiceImpl : public CMD::C2G_UserLoginService
+    
+class C2G_UserLoginService : public CreateService<C2G_UserLoginService>
+                           , public CMD::C2G_UserLoginService
 {
-    virtual void C2G_UserLogin(::PROTOBUF_NAMESPACE_ID::RpcController *controller,
-                               const ::CMD::C2G_UserLoginArg *request,
-                               ::CMD::C2G_UserLoginRes *response,
-                               ::google::protobuf::Closure *done) override;
+public:
+    C2G_UserLoginService();
+
+    virtual void C2G_UserLogin(const ::CMD::C2G_UserLoginArgPtr& request,
+                               const ::CMD::C2G_UserLoginResPtr& response) override;
+
 };
 
 }   // namespace RPC

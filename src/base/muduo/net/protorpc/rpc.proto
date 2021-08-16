@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package muduo.net;
+
+// option go_package = "muduorpc";
+/* option java_package = "com.chenshuo.muduo.protorpc"; */
+/* option java_outer_classname = "RpcProto"; */
+
+import "google/protobuf/descriptor.proto";
+
+extend google.protobuf.MethodOptions
+{
+  bool idempotent = 1111;
+  bool noreturn = 1112;
+}
+
+enum MessageType
+{
+  MSGTYPE_DEFAULT           = 0;
+  MSGTYPE_REQUEST           = 1;
+  MSGTYPE_RESPONSE          = 2;
+  MSGTYPE_ERROR             = 3; // not used
+}
+
+enum ErrorCode
+{
+  ERR_NO_ERROR                            = 0;
+  ERR_WRONG_PROTO                         = 1;
+  ERR_NO_SERVICE                          = 2;
+  ERR_NO_METHOD                           = 3;
+  ERR_INVALID_REQUEST                     = 4;
+  ERR_INVALID_RESPONSE                    = 5;
+  ERR_TIMEOUT                             = 6;
+}
+
+message RpcMessage
+{
+  MessageType type          = 1;
+  fixed64 id                = 2;
+
+  string service            = 3;
+  string method             = 4;
+  bytes request             = 5;
+
+  bytes response            = 6;
+
+  ErrorCode error           = 7;
+}

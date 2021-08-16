@@ -78,7 +78,6 @@ void Server::listen()
     EventLoop loop;
     InetAddress listenAddr(9981);
     RpcServer server(shared_from_this(), &loop, listenAddr);
-    server.setServices(MgrMessage::Instance().GetService());
     server.setThreadNum(1);
     server.start();
     loop.Loop();

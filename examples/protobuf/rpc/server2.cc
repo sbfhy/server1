@@ -1,33 +1,15 @@
-#include <sudoku.pb.h>
+#include "message/test/sudoku.pb.h"
 
 #include <muduo/base/common/logging.h>
 #include "muduo/base/common/threadpool.h"
 #include <muduo/net/common/eventloop.h>
 #include <muduo/net/protorpc/RpcServer.h>
+#include "src/base/mgr/mgr_message.h"
+
 #include <unistd.h>
 
 using namespace muduo;
 using namespace muduo::net;
-
-namespace sudoku
-{
-
-class SudokuServiceImpl : public SudokuService
-{
-public:
-  virtual void Solve(::google::protobuf::RpcController* controller,
-                     const ::sudoku::SudokuRequest* request,
-                     ::sudoku::SudokuResponse* response,
-                     ::google::protobuf::Closure* done)
-  {
-    LOG_INFO << "SudokuServiceImpl::Solve";
-    response->set_solved(true);
-    response->set_checkerboard("1234567");
-    done->Run();
-  }
-};
-
-}
 
 class TestServer
 {
@@ -64,11 +46,15 @@ int main()
 {
   LOG_INFO << "pid = " << getpid();
 
+  MgrMessage::Instance().Wake();
+
   std::shared_ptr<EventLoop> mainLoopPtr = std::make_shared<EventLoop>();
 
   TestServer testServer(mainLoopPtr);
   testServer.Start();
   
   mainLoopPtr->Loop();
+
+  return 0;
 }
 

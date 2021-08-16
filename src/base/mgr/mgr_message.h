@@ -1,35 +1,30 @@
 #pragma once
 
+#include "muduo/base/define/define_service.h"
 #include "src/base/common/singleton.h"
-#include "src/base/mgr/mgr_base.h"
-
-#include <memory>
-#include <map>
 
 namespace google {
 namespace protobuf {
 
-class Service;
+class Message;
+typedef ::std::shared_ptr<Message> MessagePtr;
 
-}  // namespace protobuf
-}  // namespace google
-
-typedef std::shared_ptr<::google::protobuf::Service> ServicePtr;
-typedef std::map<std::string, ServicePtr> ServiceMap;
+}   // namespace google {
+}   // namespace protobuf
 
 class MgrMessage : public Singleton<MgrMessage>
-                 , public MgrBase
 {
 public:
-    virtual void Wake();
+    virtual void Wake() override;
+    virtual void Init() override;
 
-    const ServiceMap* GetService() { return &m_mapServices; }
+    const ServicePtr GetServicePtr(ENUM::EServiceType) const;
+    const SServiceInfo *GetServiceInfo(const ::google::protobuf::Descriptor *requestDesc) const;
 
 private:
-    // NOT thread safe, must call before RpcServer::start().
     void registerService();
-    void registerService(ServicePtr);
 
 private:
-    ServiceMap m_mapServices;
+    TArrayService m_arrayService;
+    TMapDescriptor2ServiceInfo m_mapRequest2ServiceInfo;
 };

@@ -1,4 +1,4 @@
-#include <sudoku.pb.h>
+#include "message/test/sudoku.pb.h"
 
 #include <muduo/base/common/logging.h>
 #include <muduo/net/common/eventloop.h>
@@ -48,9 +48,9 @@ class RpcClient : noncopyable
       channel_->setConnection(conn);
       sudoku::SudokuRequest request;
       request.set_checkerboard("001010");
-      sudoku::SudokuResponse *response = new sudoku::SudokuResponse;
+    //   sudoku::SudokuResponse *response = new sudoku::SudokuResponse;
 
-      stub_.Solve(nullptr, &request, response, NewCallback(this, &RpcClient::solved, response));
+    //   stub_.Solve(nullptr, &request, response, NewCallback(this, &RpcClient::solved, response));
     }
     else
     {
