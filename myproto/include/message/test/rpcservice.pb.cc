@@ -1232,6 +1232,25 @@ void RpcService::TimeOut(const ::google::protobuf::MethodDescriptor* method,
   }
 }
 
+void RpcService::DelayResponse(const ::google::protobuf::MethodDescriptor* method,
+                                const ::google::protobuf::MessagePtr& request,
+                                const ::google::protobuf::MessagePtr& response) {
+  GOOGLE_DCHECK_EQ(method->service(), RpcService_descriptor_);
+  switch(method->index()) {
+    case 0:
+      listRpc_DelayResponse(::google::protobuf::down_pointer_cast<::muduo::net::ListRpcRequest>(request),
+                           ::google::protobuf::down_pointer_cast<::muduo::net::ListRpcResponse>(response));
+      break;
+    case 1:
+      getService_DelayResponse(::google::protobuf::down_pointer_cast<::muduo::net::GetServiceRequest>(request),
+                           ::google::protobuf::down_pointer_cast<::muduo::net::GetServiceResponse>(response));
+      break;
+    default:
+      GOOGLE_LOG(FATAL) << "Bad method index; this should never happen.";
+      break;
+  }
+}
+
 const ::google::protobuf::Message& RpcService::GetRequestPrototype(
     const ::google::protobuf::MethodDescriptor* method) const {
   GOOGLE_DCHECK_EQ(method->service(), descriptor());

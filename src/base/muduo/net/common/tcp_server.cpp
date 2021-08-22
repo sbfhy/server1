@@ -33,7 +33,7 @@ TcpServer::~TcpServer()
   {
     TcpConnectionPtr conn(item.second);
     item.second.reset();
-    conn->getLoop()->RunInLoop(
+    conn->GetLoop()->RunInLoop(
                                std::bind(&TcpConnection::ConnectDestroyed, conn));
   }
 }
@@ -116,7 +116,7 @@ void TcpServer::removeConnectionInLoop(const TcpConnectionPtr& conn)
   LOG_INFO << "TcpServer::removeConnectionInLoop [" << m_name << "] - connection " << conn->getName();
   size_t n = m_connections.erase(conn->getName());   (void)n;
   assert(n == 1);
-  EventLoop* ioLoop = conn->getLoop();
+  EventLoop* ioLoop = conn->GetLoop();
 
 	/*
 	 * 1. 注意 std::bind这里是值绑定了conn，也就是说conn会复制一份到bind上，conn的引用计数加1。

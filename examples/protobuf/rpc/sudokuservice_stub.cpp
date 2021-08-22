@@ -14,5 +14,5 @@ void SudokuService_Stub::Solve_DoneCb(const ::sudoku::SudokuRequestPtr& request,
 
 void SudokuService_Stub::Solve_TimeOut(const ::sudoku::SudokuRequestPtr& request) 
 {
-
+    LOG_DEBUG << request->ShortDebugString();
 }

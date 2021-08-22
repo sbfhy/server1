@@ -1293,12 +1293,16 @@ class RpcService : public ::muduo::net::Service {
   virtual void listRpc_DoneCb(const ::muduo::net::ListRpcRequestPtr& request,
                               const ::muduo::net::ListRpcResponsePtr& response) {} 
   virtual void listRpc_TimeOut(const ::muduo::net::ListRpcRequestPtr& request) {} 
+  virtual void listRpc_DelayResponse(const ::muduo::net::ListRpcRequestPtr& request, 
+                                     const ::muduo::net::ListRpcResponsePtr& response) {} 
 
   virtual void getService(const ::muduo::net::GetServiceRequestPtr& request,
                        const ::muduo::net::GetServiceResponsePtr& response);
   virtual void getService_DoneCb(const ::muduo::net::GetServiceRequestPtr& request,
                               const ::muduo::net::GetServiceResponsePtr& response) {} 
   virtual void getService_TimeOut(const ::muduo::net::GetServiceRequestPtr& request) {} 
+  virtual void getService_DelayResponse(const ::muduo::net::GetServiceRequestPtr& request, 
+                                     const ::muduo::net::GetServiceResponsePtr& response) {} 
 
 
   // implements Service ----------------------------------------------
@@ -1319,6 +1323,10 @@ class RpcService : public ::muduo::net::Service {
 
   void TimeOut(const ::google::protobuf::MethodDescriptor* method,
                const ::google::protobuf::MessagePtr& request);
+
+  void DelayResponse(const ::google::protobuf::MethodDescriptor* method,
+                     const ::google::protobuf::MessagePtr& request,
+                     const ::google::protobuf::MessagePtr& response);
 
  private:
   GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(RpcService);

@@ -71,8 +71,8 @@ public:
   self& operator<<(DWORD);
   self& operator<<(SWORD);
   self& operator<<(WORD);
-  self& operator<<(INTPTR);
-  self& operator<<(UINTPTR);
+//   self& operator<<(INTPTR);
+//   self& operator<<(UINTPTR);
   self& operator<<(SQWORD);
   self& operator<<(QWORD);
   self& operator<<(const void*);

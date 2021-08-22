@@ -555,6 +555,8 @@ class SudokuService : public ::muduo::net::Service {
   virtual void Solve_DoneCb(const ::sudoku::SudokuRequestPtr& request,
                               const ::sudoku::SudokuResponsePtr& response) {} 
   virtual void Solve_TimeOut(const ::sudoku::SudokuRequestPtr& request) {} 
+  virtual void Solve_DelayResponse(const ::sudoku::SudokuRequestPtr& request, 
+                                     const ::sudoku::SudokuResponsePtr& response) {} 
 
 
   // implements Service ----------------------------------------------
@@ -575,6 +577,10 @@ class SudokuService : public ::muduo::net::Service {
 
   void TimeOut(const ::google::protobuf::MethodDescriptor* method,
                const ::google::protobuf::MessagePtr& request);
+
+  void DelayResponse(const ::google::protobuf::MethodDescriptor* method,
+                     const ::google::protobuf::MessagePtr& request,
+                     const ::google::protobuf::MessagePtr& response);
 
  private:
   GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(SudokuService);

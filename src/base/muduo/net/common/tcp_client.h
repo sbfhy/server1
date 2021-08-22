@@ -26,7 +26,7 @@ public:
 
   TcpConnectionPtr getConnection() const { MutexLockGuard lock(m_mutex); return m_connection; }
 
-  EventLoop* getLoop() const { return m_loop; }
+  EventLoop* GetLoop() const { return m_loop; }
   bool getRetry() const { return m_retry; }
   void enableRetry() { m_retry = true; }
 

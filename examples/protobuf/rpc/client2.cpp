@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
   if (argc > 1)
   {
     LOG_INFO << "ip = " << argv[1];
-    
+
     MgrMessage::Instance().Wake();
 
     EventLoop loop;

@@ -557,6 +557,21 @@ void C2G_UserLoginService::TimeOut(const ::google::protobuf::MethodDescriptor* m
   }
 }
 
+void C2G_UserLoginService::DelayResponse(const ::google::protobuf::MethodDescriptor* method,
+                                const ::google::protobuf::MessagePtr& request,
+                                const ::google::protobuf::MessagePtr& response) {
+  GOOGLE_DCHECK_EQ(method->service(), C2G_UserLoginService_descriptor_);
+  switch(method->index()) {
+    case 0:
+      C2G_UserLogin_DelayResponse(::google::protobuf::down_pointer_cast<::CMD::C2G_UserLoginArg>(request),
+                           ::google::protobuf::down_pointer_cast<::CMD::C2G_UserLoginRes>(response));
+      break;
+    default:
+      GOOGLE_LOG(FATAL) << "Bad method index; this should never happen.";
+      break;
+  }
+}
+
 const ::google::protobuf::Message& C2G_UserLoginService::GetRequestPrototype(
     const ::google::protobuf::MethodDescriptor* method) const {
   GOOGLE_DCHECK_EQ(method->service(), descriptor());

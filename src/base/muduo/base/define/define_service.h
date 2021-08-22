@@ -6,6 +6,7 @@
 #include <string>
 
 #include "service/service_enum.pb.h"
+#include "muduo/base/define/define_variable.h"
 
 namespace google {
 namespace protobuf {
@@ -13,6 +14,8 @@ namespace protobuf {
 class Service;
 class Descriptor;
 class Message;
+
+typedef std::shared_ptr<Message> MessagePtr;
 
 }  // namespace protobuf
 }  // namespace google
@@ -25,9 +28,9 @@ class Service;
 } // namespace net
 } // namespace muduo
 
-typedef std::shared_ptr<muduo::net::Service> ServicePtr;
-// typedef std::map<std::string, ServicePtr> ServiceMap;
+typedef std::shared_ptr<::muduo::net::Service> ServicePtr;
 typedef std::array<ServicePtr, ENUM::SERVICETYPE_MAX> TArrayService;
+
 
 struct SServiceInfo
 {
@@ -35,3 +38,15 @@ struct SServiceInfo
     int methodIndex = -1;
 };
 typedef std::map<const ::google::protobuf::Descriptor*, SServiceInfo> TMapDescriptor2ServiceInfo;
+
+
+typedef std::function<void( const ::google::protobuf::MethodDescriptor* method,
+                            const ::google::protobuf::MessagePtr& request,
+                            const ::google::protobuf::MessagePtr& response)> TFuncDelayResponse;
+
+struct SDelayInfo
+{
+    ::google::protobuf::MessagePtr response;
+    TFuncDelayResponse funcDelayResponse;
+};
+typedef std::map<QWORD, SDelayInfo> TMapQWORD2DelayInfo;

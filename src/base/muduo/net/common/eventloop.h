@@ -62,7 +62,7 @@ public:
   void QueueInLoop(Functor cb);
 
   ///定时器相关
-  // Runs callback at 'time'. Safe to call from other threads.    // 在time里调用cb. 在其它线程里调用也是安全的。
+  // Runs callback at 'time'. Safe to call from other threads.    // 在time时间调用cb. 在其它线程里调用也是安全的。
   TimerId RunAt(TimeStamp time, TimerCallback cb);
   // Runs callback after @c delay seconds. Safe to call from other threads. // 延迟delay秒后调用cb。在其它线程里调用也是安全的。 
   TimerId RunAfter(double delay, TimerCallback cb);
@@ -99,33 +99,33 @@ public:
 
 protected:
   void doPendingFunctors();                                       // 执行m_pendingFunctors中的函数
+  void printActiveChannels() const; // DEBUG
 
 private:
   void abortNotInLoopThread();
   void handleRead();  // waked up                                 // 从m_wakeupFd中读入8个字节
-  void printActiveChannels() const; // DEBUG
 
 protected:
-  bool m_looping; /* atomic */                                    // 是否正在loop()中运行
-  std::atomic<bool> m_quit;                                       // loop()中的停止条件，在quit()中设置
-  SQWORD m_iteration;                                             // 第几次循环
-
-private:
   typedef std::vector<Channel*> ChannelList;
 
+  bool m_looping; /* atomic */                                    // 是否正在loop()中运行
+  std::atomic<bool> m_quit;                                       // loop()中的停止条件，在quit()中设置
   bool m_eventHandling; /* atomic */                              // 是否正在loop()处理事件，即正在调用Channel::handleEvent(1)
-  bool m_callingPendingFunctors; /* atomic */                     // 是否正在doPendingFunctors()中运行，即正在执行m_pendingFunctors中的函数
-  const pid_t m_threadId;                                         // 线程id
+  SQWORD m_iteration;                                             // 第几次循环
   TimeStamp m_pollReturnTime;                                     // m_poller->poll(2)返回的时间
   std::unique_ptr<Poller> m_poller;
+  ChannelList m_activeChannels;                                   // poll出来需要处理的Channels
+  Channel* m_currentActiveChannel;                                // 当前运行的Channel
+
+private:
+  bool m_callingPendingFunctors; /* atomic */                     // 是否正在doPendingFunctors()中运行，即正在执行m_pendingFunctors中的函数
+  const pid_t m_threadId;                                         // 线程id
   std::unique_ptr<TimerQueue> m_timerQueue;                       // runAt(2)和runEvery(2)添加的定时器队列
   SDWORD m_wakeupFd;  // 一个能被用户应用程序用于时间等待唤醒机制的eventfd对象，用来唤醒该loop线程
   // unlike in TimerQueue, which is an internal class, we don't expose Channel to client.
   std::unique_ptr<Channel> m_wakeupChannel;                       // 唤醒的Channel
   std::any m_context;                                             // 
   // scratch variables
-  ChannelList m_activeChannels;                                   // poll出来需要处理的Channels
-  Channel* m_currentActiveChannel;                                // 当前运行的Channel
   mutable MutexLock m_mutex;
   std::vector<Functor> m_pendingFunctors GUARDED_BY(m_mutex);     // 保存即将执行的回调 
 };

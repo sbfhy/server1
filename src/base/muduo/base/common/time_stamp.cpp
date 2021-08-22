@@ -14,7 +14,7 @@ std::string TimeStamp::toString() const
   CHAR buf[32] = {0};
   QWORD sec = getUSec() / kMicroSecondsPerSecond;
   QWORD uSec = getUSec() % kMicroSecondsPerSecond;
-  snprintf(buf, sizeof(buf), "%llu .%06llu ", sec, uSec);
+  snprintf(buf, sizeof(buf), "%" PRIu64" .%06" PRIu64" ", sec, uSec);
   return buf;
 }
 

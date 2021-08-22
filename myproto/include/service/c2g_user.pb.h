@@ -429,6 +429,8 @@ class C2G_UserLoginService : public ::muduo::net::Service {
   virtual void C2G_UserLogin_DoneCb(const ::CMD::C2G_UserLoginArgPtr& request,
                               const ::CMD::C2G_UserLoginResPtr& response) {} 
   virtual void C2G_UserLogin_TimeOut(const ::CMD::C2G_UserLoginArgPtr& request) {} 
+  virtual void C2G_UserLogin_DelayResponse(const ::CMD::C2G_UserLoginArgPtr& request, 
+                                     const ::CMD::C2G_UserLoginResPtr& response) {} 
 
 
   // implements Service ----------------------------------------------
@@ -449,6 +451,10 @@ class C2G_UserLoginService : public ::muduo::net::Service {
 
   void TimeOut(const ::google::protobuf::MethodDescriptor* method,
                const ::google::protobuf::MessagePtr& request);
+
+  void DelayResponse(const ::google::protobuf::MethodDescriptor* method,
+                     const ::google::protobuf::MessagePtr& request,
+                     const ::google::protobuf::MessagePtr& response);
 
  private:
   GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(C2G_UserLoginService);

@@ -10,7 +10,7 @@ class SudokuService_Stub : public CreateService<SudokuService_Stub>
 {
 public:
     SudokuService_Stub();
-    
+
     virtual void Solve_DoneCb(const ::sudoku::SudokuRequestPtr& request,
                               const ::sudoku::SudokuResponsePtr& response) override;
 

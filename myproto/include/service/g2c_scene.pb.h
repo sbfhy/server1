@@ -362,6 +362,8 @@ class G2C_SceneService : public ::muduo::net::Service {
   virtual void G2C_EnterScene_DoneCb(const ::CMD::G2C_EnterSceneArgPtr& request,
                               const ::CMD::G2C_EnterSceneResPtr& response) {} 
   virtual void G2C_EnterScene_TimeOut(const ::CMD::G2C_EnterSceneArgPtr& request) {} 
+  virtual void G2C_EnterScene_DelayResponse(const ::CMD::G2C_EnterSceneArgPtr& request, 
+                                     const ::CMD::G2C_EnterSceneResPtr& response) {} 
 
 
   // implements Service ----------------------------------------------
@@ -382,6 +384,10 @@ class G2C_SceneService : public ::muduo::net::Service {
 
   void TimeOut(const ::google::protobuf::MethodDescriptor* method,
                const ::google::protobuf::MessagePtr& request);
+
+  void DelayResponse(const ::google::protobuf::MethodDescriptor* method,
+                     const ::google::protobuf::MessagePtr& request,
+                     const ::google::protobuf::MessagePtr& response);
 
  private:
   GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(G2C_SceneService);

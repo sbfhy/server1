@@ -8,6 +8,7 @@
 #include "muduo/base/common/atomic.h"
 #include "muduo/base/common/mutex.h"
 #include "muduo/net/protorpc/RpcCodec.h"
+#include "muduo/net/common/timerid.h"
 #include "muduo/base/define/define_service.h"
 #include "down_pointer_cast.h"
 #include "service.h"
@@ -117,6 +118,7 @@ class EventLoop;
 //   MyService* service = new MyService::Stub(channel);
 //   service->MyMethod(request, &response, callback);
 class RpcChannel : public RpcChannelBase
+                 , public std::enable_shared_from_this<RpcChannel>
 {
 public:
     RpcChannel();
@@ -145,17 +147,15 @@ private:
                       const RpcMessagePtr &messagePtr,
                       TimeStamp receiveTime);
 
-    void solveRequestMsg(const RpcMessage &message);        // 处理request消息
-    void solveResponseMsg(const RpcMessage &message);       // 处理response消息
+    void serviceHandleRequestMsg(const RpcMessage &message);    // Service处理request消息
+    void stubHandleResponseMsg(const RpcMessage &message);      // Stub处理response消息
 
     void doneCallbackInIoLoop(::google::protobuf::MessagePtr response,
                               int64_t id);
     void doneCallback(::google::protobuf::MessagePtr response,
                       int64_t id);
 
-    virtual void CallMethod(const ::google::protobuf::MethodDescriptor *method,
-                            const ::google::protobuf::MessagePtr &request,
-                            const ::google::protobuf::MessagePtr &response);
+    void requestTimeOut(int64_t id);
 
 private:
     struct OutstandingCall
@@ -163,6 +163,7 @@ private:
         ::google::protobuf::MessagePtr request = nullptr;
         ENUM::EServiceType serviceType = ENUM::SERVICETYPE_MIN;
         int methodIndex = -1;
+        TimerId timerId;
     };
 
     RpcCodec codec_;

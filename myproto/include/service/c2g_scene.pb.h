@@ -630,12 +630,16 @@ class C2G_SceneEntryService : public ::muduo::net::Service {
   virtual void C2G_CreateEntry_DoneCb(const ::CMD::C2G_CreateEntryArgPtr& request,
                               const ::CMD::C2G_CreateEntryResPtr& response) {} 
   virtual void C2G_CreateEntry_TimeOut(const ::CMD::C2G_CreateEntryArgPtr& request) {} 
+  virtual void C2G_CreateEntry_DelayResponse(const ::CMD::C2G_CreateEntryArgPtr& request, 
+                                     const ::CMD::C2G_CreateEntryResPtr& response) {} 
 
   virtual void C2G_EnterScene(const ::CMD::C2G_EnterSceneArgPtr& request,
                        const ::CMD::C2G_EnterSceneResPtr& response);
   virtual void C2G_EnterScene_DoneCb(const ::CMD::C2G_EnterSceneArgPtr& request,
                               const ::CMD::C2G_EnterSceneResPtr& response) {} 
   virtual void C2G_EnterScene_TimeOut(const ::CMD::C2G_EnterSceneArgPtr& request) {} 
+  virtual void C2G_EnterScene_DelayResponse(const ::CMD::C2G_EnterSceneArgPtr& request, 
+                                     const ::CMD::C2G_EnterSceneResPtr& response) {} 
 
 
   // implements Service ----------------------------------------------
@@ -656,6 +660,10 @@ class C2G_SceneEntryService : public ::muduo::net::Service {
 
   void TimeOut(const ::google::protobuf::MethodDescriptor* method,
                const ::google::protobuf::MessagePtr& request);
+
+  void DelayResponse(const ::google::protobuf::MethodDescriptor* method,
+                     const ::google::protobuf::MessagePtr& request,
+                     const ::google::protobuf::MessagePtr& response);
 
  private:
   GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(C2G_SceneEntryService);

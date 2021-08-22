@@ -608,6 +608,21 @@ void SudokuService::TimeOut(const ::google::protobuf::MethodDescriptor* method,
   }
 }
 
+void SudokuService::DelayResponse(const ::google::protobuf::MethodDescriptor* method,
+                                const ::google::protobuf::MessagePtr& request,
+                                const ::google::protobuf::MessagePtr& response) {
+  GOOGLE_DCHECK_EQ(method->service(), SudokuService_descriptor_);
+  switch(method->index()) {
+    case 0:
+      Solve_DelayResponse(::google::protobuf::down_pointer_cast<::sudoku::SudokuRequest>(request),
+                           ::google::protobuf::down_pointer_cast<::sudoku::SudokuResponse>(response));
+      break;
+    default:
+      GOOGLE_LOG(FATAL) << "Bad method index; this should never happen.";
+      break;
+  }
+}
+
 const ::google::protobuf::Message& SudokuService::GetRequestPrototype(
     const ::google::protobuf::MethodDescriptor* method) const {
   GOOGLE_DCHECK_EQ(method->service(), descriptor());

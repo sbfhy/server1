@@ -63,3 +63,17 @@ const SServiceInfo *MgrMessage::GetServiceInfo(const ::google::protobuf::Descrip
         return nullptr;
     return &itFind->second;
 }
+
+const ::google::protobuf::ServiceDescriptor* MgrMessage::GetServiceDescriptor(ENUM::EServiceType serviceType) const
+{
+    const auto ptr = GetServicePtr(serviceType);
+    if (!ptr) return nullptr;
+    return ptr->GetDescriptor();
+}
+
+const ::google::protobuf::MethodDescriptor* MgrMessage::GetMethodDescriptor(ENUM::EServiceType serviceType, int methodIdx) const
+{
+    const auto serviceDesc = GetServiceDescriptor(serviceType);
+    if (!serviceDesc) return nullptr;
+    return serviceDesc->method(methodIdx);
+}

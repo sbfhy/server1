@@ -28,13 +28,13 @@ static int test_down_pointer_cast()
 static int dummy __attribute__((unused)) = test_down_pointer_cast();
 
 RpcChannel::RpcChannel()
-    : codec_(std::bind(&RpcChannel::onRpcMessage, this, _1, _2, _3))
+    : codec_(std::bind(&RpcChannel::onRpcMessageInMainLoop, this, _1, _2, _3))
 {
     LOG_INFO << "RpcChannel::ctor - " << this;
 }
 
 RpcChannel::RpcChannel(const TcpConnectionPtr &conn)
-    : codec_(std::bind(&RpcChannel::onRpcMessage, this, _1, _2, _3))
+    : codec_(std::bind(&RpcChannel::onRpcMessageInMainLoop, this, _1, _2, _3))
     , conn_(conn)
 {
     LOG_INFO << "RpcChannel::ctor - " << this;
@@ -48,7 +48,7 @@ RpcChannel::~RpcChannel()
 void RpcChannel::Send(const ::google::protobuf::MessagePtr& request)
 {
     // FIXME: can we move serialization to IO thread? 
-    if (!request) return ;
+    if (!request || !conn_ || !conn_->GetLoop()) return ;
     const SServiceInfo *serviceInfo = MgrMessage::Instance().GetServiceInfo(request->GetDescriptor());
     if (!serviceInfo) return ;
 
@@ -60,26 +60,17 @@ void RpcChannel::Send(const ::google::protobuf::MessagePtr& request)
     message.set_method(serviceInfo->methodIndex);
     message.set_request(request->SerializeAsString());  // FIXME: error check
 
-    {LDBG("M_NET") << message.ShortDebugString();}
-
-    // FIXME: timeout
-    OutstandingCall out = { request, serviceInfo->serviceType, serviceInfo->methodIndex}; 
+    OutstandingCall out = { request, 
+                            serviceInfo->serviceType, 
+                            serviceInfo->methodIndex,
+                            conn_->GetLoop()->RunAfter(5.0, std::bind(&RpcChannel::requestTimeOut, shared_from_this(), id)) }; 
     {
     MutexLockGuard lock(mutex_);
     outstandings_[id] = out;
     }
-    codec_.send(conn_, message);
-}
 
-// Call the given method of the remote service.  The signature of this
-// procedure looks the same as Service::CallMethod(), but the requirements
-// are less strict in one important way:  the request and response objects
-// need not be of any specific class as long as their descriptors are
-// method->input_type() and method->output_type().
-void RpcChannel::CallMethod(const ::google::protobuf::MethodDescriptor *method,
-                            const ::google::protobuf::MessagePtr &request,
-                            const ::google::protobuf::MessagePtr &response)
-{
+    {LDBG("M_NET") << message.ShortDebugString();}
+    codec_.send(conn_, message);
 }
 
 void RpcChannel::onDisconnect()
@@ -120,11 +111,11 @@ void RpcChannel::onRpcMessage(const TcpConnectionPtr &conn,
     //   LDBG("M_NET") << message.DebugString();
     if (message.type() == MSGTYPE_RESPONSE)
     {
-        solveResponseMsg(message);
+        stubHandleResponseMsg(message);
     }
     else if (message.type() == MSGTYPE_REQUEST)
     {
-        solveRequestMsg(message);
+        serviceHandleRequestMsg(message);
     }
     else if (message.type() == MSGTYPE_ERROR)
     {
@@ -132,7 +123,7 @@ void RpcChannel::onRpcMessage(const TcpConnectionPtr &conn,
     }
 }
 
-void RpcChannel::solveRequestMsg(const RpcMessage &message) // 处理request消息
+void RpcChannel::serviceHandleRequestMsg(const RpcMessage &message) // Service处理request消息
 {
     ErrorCode errorCode = ERR_NO_ERROR;
     auto funcErrorCode = [&]()
@@ -173,7 +164,7 @@ void RpcChannel::solveRequestMsg(const RpcMessage &message) // 处理request消�
     int64_t id = message.id(); (void)id;
     ::google::protobuf::MessagePtr response;
 
-    // 如果response类型是EmptyResponse，就不发回包，即不执行doneCallback
+    // 如果response类型是EmptyResponse，就不发回包
     if (&service->GetResponsePrototype(method) != &CMD::EmptyResponse::default_instance())
     {
         response = ::google::protobuf::MessagePtr(service->GetResponsePrototype(method).New()); 
@@ -184,13 +175,13 @@ void RpcChannel::solveRequestMsg(const RpcMessage &message) // 处理request消�
 
     if (response)                               // FIXME: delay response
     {
-        doneCallbackInIoLoop(response, id); // 发送回包
+        doneCallbackInIoLoop(response, id);     // 发送回包
     }
 
     funcErrorCode();
 }
 
-void RpcChannel::solveResponseMsg(const RpcMessage &message)    // 处理response消息
+void RpcChannel::stubHandleResponseMsg(const RpcMessage &message)    // Stub处理response消息
 {
     if (message.response() == "")
         return ;
@@ -225,6 +216,10 @@ void RpcChannel::solveResponseMsg(const RpcMessage &message)    // 处理respons
         LOG_WARN << "[处理response-没找到对应id] " << message.ShortDebugString();
         return ;
     }
+    if (conn_ && conn_->GetLoop())
+    {
+        conn_->GetLoop()->Cancel(out.timerId);  // 删除超时回调的定时器
+    }
 
     const ServicePtr pService = MgrMessage::Instance().GetServicePtr(out.serviceType);
     if (!pService || !pService->GetDescriptor())
@@ -239,13 +234,14 @@ void RpcChannel::solveResponseMsg(const RpcMessage &message)    // 处理respons
     ::google::protobuf::MessagePtr response(
             pService->GetResponsePrototype(methodDesc).New());
     response->ParseFromString(message.response());
-    pService->DoneCallback(methodDesc, out.request, response);
+    pService->DoneCallback(methodDesc, out.request, response);  // 调用Stub中的回调
 }
 
 void RpcChannel::doneCallbackInIoLoop(::google::protobuf::MessagePtr response,
                                       int64_t id)
 {
-    EventLoop *pIoLoop = conn_->getLoop();
+    if (!response || !conn_) return;
+    EventLoop *pIoLoop = conn_->GetLoop();
     if (pIoLoop)
     {
         pIoLoop->RunInLoop(
@@ -270,3 +266,19 @@ void RpcChannel::doneCallback(::google::protobuf::MessagePtr response,
     LDBG("M_NET") << response->ShortDebugString();
 }
 
+void RpcChannel::requestTimeOut(int64_t id)
+{
+    {
+    MutexLockGuard lock(mutex_);
+
+    auto it = outstandings_.find(id);
+    if (it == outstandings_.end() || !it->second.request) 
+        return ;
+    const ServicePtr servicePtr = MgrMessage::Instance().GetServicePtr(it->second.serviceType);
+    const auto methodDesc = MgrMessage::Instance().GetMethodDescriptor(it->second.serviceType, it->second.methodIndex);
+    if (!servicePtr || !methodDesc) return ;
+    servicePtr->TimeOut(methodDesc, it->second.request);
+
+    outstandings_.erase(it);
+    }
+}

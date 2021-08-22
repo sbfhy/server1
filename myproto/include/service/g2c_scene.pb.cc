@@ -491,6 +491,21 @@ void G2C_SceneService::TimeOut(const ::google::protobuf::MethodDescriptor* metho
   }
 }
 
+void G2C_SceneService::DelayResponse(const ::google::protobuf::MethodDescriptor* method,
+                                const ::google::protobuf::MessagePtr& request,
+                                const ::google::protobuf::MessagePtr& response) {
+  GOOGLE_DCHECK_EQ(method->service(), G2C_SceneService_descriptor_);
+  switch(method->index()) {
+    case 0:
+      G2C_EnterScene_DelayResponse(::google::protobuf::down_pointer_cast<::CMD::G2C_EnterSceneArg>(request),
+                           ::google::protobuf::down_pointer_cast<::CMD::G2C_EnterSceneRes>(response));
+      break;
+    default:
+      GOOGLE_LOG(FATAL) << "Bad method index; this should never happen.";
+      break;
+  }
+}
+
 const ::google::protobuf::Message& G2C_SceneService::GetRequestPrototype(
     const ::google::protobuf::MethodDescriptor* method) const {
   GOOGLE_DCHECK_EQ(method->service(), descriptor());

@@ -134,17 +134,17 @@ LogStream& LogStream::operator<<(WORD v)
   return *this;
 }
 
-LogStream& LogStream::operator<<(INTPTR v)
-{
-  formatInteger(v);
-  return *this;
-}
+// LogStream& LogStream::operator<<(INTPTR v)
+// {
+//   formatInteger(v);
+//   return *this;
+// }
 
-LogStream& LogStream::operator<<(UINTPTR v)
-{
-  formatInteger(v);
-  return *this;
-}
+// LogStream& LogStream::operator<<(UINTPTR v)
+// {
+//   formatInteger(v);
+//   return *this;
+// }
 
 LogStream& LogStream::operator<<(SQWORD v)
 {
@@ -241,8 +241,8 @@ template Fmt::Fmt(const char* fmt, SWORD);
 template Fmt::Fmt(const char* fmt, WORD);
 template Fmt::Fmt(const char* fmt, SDWORD);
 template Fmt::Fmt(const char* fmt, DWORD);
-template Fmt::Fmt(const char* fmt, INTPTR);
-template Fmt::Fmt(const char* fmt, UINTPTR);
+// template Fmt::Fmt(const char* fmt, INTPTR);
+// template Fmt::Fmt(const char* fmt, UINTPTR);
 template Fmt::Fmt(const char* fmt, SQWORD);
 template Fmt::Fmt(const char* fmt, QWORD);
 template Fmt::Fmt(const char* fmt, FLOAT);

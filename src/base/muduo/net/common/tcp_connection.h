@@ -50,7 +50,7 @@ class Socket;
 		10. 开始调用TcpConnection析构函数，TcpConnection销毁 
  */
 class TcpConnection : private noncopyable
-                      , public std::enable_shared_from_this<TcpConnection>
+                    , public std::enable_shared_from_this<TcpConnection>
 {
 public:
   TcpConnection(EventLoop* loop, const string& name, SDWORD sockfd, const InetAddress& localAddr, const InetAddress& peerAddr);
@@ -58,7 +58,7 @@ public:
 
   std::shared_ptr<EventLoop> getMainLoop() const { return m_mainLoopPtr; }
   void SetMainLoop(std::shared_ptr<EventLoop> mainLoopPtr) { m_mainLoopPtr = mainLoopPtr; }
-  EventLoop* getLoop() const { return m_loop; }
+  EventLoop* GetLoop() const { return m_loop; }
   const string& getName() const { return m_name; }
   const InetAddress& getLocalAddress() const { return m_localAddr; }
   const InetAddress& getPeerAddress() const { return m_peerAddr; }

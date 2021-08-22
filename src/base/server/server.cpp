@@ -1,11 +1,20 @@
 #include "src/base/server/server.h"
 
 #include "muduo/base/common/logging.h"
+#include "muduo/base/common/time_stamp.h"
 #include "muduo/net/protorpc/RpcServer.h"
 #include "muduo/net/common/inet_address.h"
-#include "muduo/base/common/time_stamp.h"
+#include "muduo/net/common/poller.h"
+#include "muduo/net/common/eventloop.h"
+#include "muduo/net/common/channel.h"
 #include "src/base/mgr/mgr_message.h"
 #include "src/base/mgr/mgr_base.h"
+
+// namespace {
+
+extern const SDWORD kPollTimeMs;
+
+// }   // namespace
 
 void Server::Loop()
 {
@@ -21,10 +30,28 @@ void Server::Loop()
 
     while (!m_quit)
     {
-        ++m_iteration;
         usec = TimeStamp::now().getUSec();
-        tick(usec);
+
+        m_activeChannels.clear();
+        m_pollReturnTime = m_poller->poll(kPollTimeMs, &m_activeChannels);
+        ++ m_iteration;
+        if (Logger::getLogLevel() <= Logger::TRACE)
+        {
+            printActiveChannels();
+        }
+        // TODO sort channel by priority
+        m_eventHandling = true;
+        for (Channel* channel : m_activeChannels)
+        {
+            m_currentActiveChannel = channel;
+            m_currentActiveChannel->HandleEvent(m_pollReturnTime);
+        }
+        m_currentActiveChannel = nullptr;
+        m_eventHandling = false;
         doPendingFunctors();
+
+        tick(usec);
+
         postUsec = TimeStamp::now().getUSec();
         frameOffset = postUsec - usec;
         if (frameOffset > m_warnFrameOffset)

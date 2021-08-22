@@ -17,11 +17,11 @@
 using namespace muduo;
 using namespace muduo::net;
 
-namespace 
-{
+// namespace 
+// {
 __thread EventLoop* t_loopInThisThread = 0;               // 记录这个线程的EventLoop
 
-const SDWORD kPollTimeMs = 10000;
+extern const SDWORD kPollTimeMs = 10000;
 
 SDWORD createEventfd()                                      // 创建eventfd, 事件通知文件描述符
 {
@@ -46,7 +46,7 @@ public:
 #pragma GCC diagnostic error "-Wold-style-cast"
 
 IgnoreSigPipe initObj;
-} // namespace 
+// } // namespace 
 
 
 EventLoop* EventLoop::getEventLoopOfCurrentThread()
@@ -57,15 +57,15 @@ EventLoop* EventLoop::getEventLoopOfCurrentThread()
 EventLoop::EventLoop()
   : m_looping(false)
   , m_quit(false)
-  , m_iteration(0)
   , m_eventHandling(false)
+  , m_iteration(0)
+  , m_poller(Poller::newDefaultPoller(this))
+  , m_currentActiveChannel(nullptr)
   , m_callingPendingFunctors(false)
   , m_threadId(CurrentThread::tid())
-  , m_poller(Poller::newDefaultPoller(this))
   , m_timerQueue(NEW TimerQueue(this))
   , m_wakeupFd(createEventfd())
   , m_wakeupChannel(NEW Channel(this, m_wakeupFd))
-  , m_currentActiveChannel(nullptr)
 {
   LOG_DEBUG << "EventLoop created " << this;
   if (t_loopInThisThread)                               // 一个线程最多只能有一个EventLoop

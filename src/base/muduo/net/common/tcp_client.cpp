@@ -59,7 +59,7 @@ TcpClient::~TcpClient()
   }
   if (conn)
   {
-    assert(m_loop == conn->getLoop());
+    assert(m_loop == conn->GetLoop());
     // FIXME: not 100% safe, if we are in different thread
     CloseCallback cb = std::bind(&detail::removeConnection, m_loop, _1);
     m_loop->RunInLoop(
@@ -131,7 +131,7 @@ void TcpClient::newConnection(int sockfd)
 void TcpClient::removeConnection(const TcpConnectionPtr& conn)
 {
   m_loop->AssertInLoopThread();
-  assert(m_loop == conn->getLoop());
+  assert(m_loop == conn->GetLoop());
 
   {
     MutexLockGuard lock(m_mutex);

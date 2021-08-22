@@ -12,8 +12,8 @@ typedef unsigned short WORD;
 typedef short SWORD;
 typedef uintptr_t UINTPTR;
 typedef intptr_t INTPTR;
-typedef unsigned long long QWORD;
-typedef long long SQWORD;
+typedef uint64_t QWORD;
+typedef int64_t SQWORD;
 typedef float FLOAT;
 typedef double DOUBLE;
 
