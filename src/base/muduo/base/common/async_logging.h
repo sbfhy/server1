@@ -2,7 +2,7 @@
 
 #include "muduo/base/define/define_variable.h"
 #include "muduo/base/common/mutex.h"
-#include "muduo/base/common/noncopyable.h"
+#include "noncopyable.h"
 #include "muduo/base/common/thread.h"
 #include "muduo/base/common/count_down_latch.h"
 #include "muduo/base/common/log_stream.h"

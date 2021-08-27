@@ -4,7 +4,7 @@
 // Author: Shuo Chen (chenshuo at chenshuo dot com)
 #pragma once
 
-#include <muduo/base/common/noncopyable.h>
+#include <noncopyable.h>
 
 #include <stdint.h>
 

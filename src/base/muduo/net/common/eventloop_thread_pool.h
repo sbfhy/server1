@@ -1,6 +1,6 @@
 #pragma once
 
-#include "muduo/base/common/noncopyable.h"
+#include "noncopyable.h"
 #include <functional>
 #include <memory>
 #include <vector>

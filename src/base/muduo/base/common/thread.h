@@ -1,7 +1,7 @@
 #pragma once
 
 #include "muduo/base/define/define_variable.h"
-#include "muduo/base/common/noncopyable.h"
+#include "noncopyable.h"
 #include "muduo/base/common/atomic.h"
 #include "muduo/base/common/count_down_latch.h"
 

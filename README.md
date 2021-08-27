@@ -11,7 +11,7 @@
 
 # 注意
 ```
-CreateDynamic的派生类一定要显式声明构造函数，否则不会执行注册代码。自己定义的Service和Stub都要继承自CreateService，所以也要显式声明构造函数。  
+CreateDynamic的派生类一定要显式声明构造函数，否则不会执行注册代码。自己定义的Service和Stub都要显式声明构造函数。  
 ```
 
 <br />
@@ -24,6 +24,7 @@ CreateDynamic的派生类一定要显式声明构造函数，否则不会执行�
 # 待做
 ```
 RPC超时处理,  
+地图多线程导入，  
 
 ```
 

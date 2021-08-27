@@ -1,6 +1,6 @@
 #include "src/base/mgr/mgr_dynamicfactory.h"
 
-#include "src/base/mgr/dynamic_object.h"
+#include "dynamic_object.h"
 #include "muduo/base/common/logging.h"
 
 // 解析类型名称（转换为 A::B::C 的形式）
@@ -72,20 +72,4 @@ T *MgrDynamicFactory::Create(const std::string &type_name)
         return NULL;
     }
     return real_obj;
-}
-
-bool MgrDynamicFactory::RegistService(const char *name, CreateServiceFunc func)
-{
-    if (!func) return false;
-    std::string type_name = ReadTypeName(name);
-    // {LDBG("M_NET") << name << ", " << type_name;}
-    return m_mapCreateServiceFunc.insert(std::make_pair(type_name, func)).second;
-}
-
-MgrDynamicFactory::PService MgrDynamicFactory::CreateService(const std::string &type_name)
-{
-    if (type_name.empty()) return nullptr;
-    const auto it = m_mapCreateServiceFunc.find(type_name);
-    if (it == m_mapCreateServiceFunc.end()) return nullptr;
-    return it->second();
 }

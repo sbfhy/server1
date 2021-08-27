@@ -1,6 +1,6 @@
 #pragma once
 
-#include "muduo/base/common/noncopyable.h"
+#include "noncopyable.h"
 #include "muduo/base/common/condition.h"
 #include "muduo/base/common/mutex.h"
 #include "muduo/base/define/define_variable.h"

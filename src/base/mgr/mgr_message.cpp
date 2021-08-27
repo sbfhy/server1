@@ -1,7 +1,7 @@
 #include "src/base/mgr/mgr_message.h"
 
 #include "muduo/base/common/logging.h"
-#include "src/base/mgr/dynamic_object.h"
+#include "dynamic_object.h"
 #include "src/base/mgr/mgr_dynamicfactory.h"
 #include "service.h"
 
@@ -25,7 +25,8 @@ void MgrMessage::registerService()
     for (int serviceType = ENUM::SERVICETYPE_MIN + 1; serviceType < ENUM::SERVICETYPE_MAX; ++ serviceType)
     {
         std::string serviceTypeName = "RPC::" + ENUM::EServiceType_Name(serviceType);
-        ServicePtr ptrService = ServicePtr( MgrDynamicFactory::Instance().CreateService(serviceTypeName) );
+        ServicePtr ptrService = ServicePtr( static_cast<muduo::net::Service*>(
+                                            MgrDynamicFactory::Instance().Create(serviceTypeName)) );
         // if (ENUM::EServiceType_IsValid(serviceType) && !ptrService)
         // {
         //     {LDBG("M_NET") << serviceTypeName << " 未注册";}

@@ -3,6 +3,7 @@
 #include <google/protobuf/service.h>
 #include "down_pointer_cast.h"
 #include "noncopyable.h"
+#include "dynamic_object.h"
 
 namespace google {
 namespace protobuf {
@@ -31,7 +32,7 @@ typedef ::std::function<void(const ::google::protobuf::Message*)> RpcDoneCallbac
 // typedef ::std::map<std::string, Service*> ServiceMap;
 
 
-class RpcChannelBase : Noncopyable
+class RpcChannelBase : noncopyable
 {
 public:
     virtual void CallMethod(const ::google::protobuf::MethodDescriptor* method,
@@ -45,7 +46,8 @@ public:
 // stubs), but they subclass this base interface.  The methods of this
 // interface can be used to call the methods of the Service without knowing
 // its exact type at compile time (analogous to Reflection).
-class Service : Noncopyable
+class Service : noncopyable
+              , public DynamicObject
 {
  public:
   Service() {}

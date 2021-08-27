@@ -1,7 +1,7 @@
 #pragma once 
 
 #include "muduo/base/common/current_thread.h"
-#include "muduo/base/common/noncopyable.h"
+#include "noncopyable.h"
 
 #include <assert.h>
 #include <pthread.h>

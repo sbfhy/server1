@@ -1,11 +1,11 @@
 #pragma once
 
 #include "service/g2c_scene.pb.h"
-#include "src/base/mgr/create_service.h"
+#include "src/base/mgr/create_dynamic.h"
 
 namespace RPC {
-    
-class G2C_SceneService_Stub : public CreateService<G2C_SceneService_Stub>
+
+class G2C_SceneService_Stub : public CreateDynamicEmpty<G2C_SceneService_Stub>
                             , public CMD::G2C_SceneService_Stub
 {
 public:

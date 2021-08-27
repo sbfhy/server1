@@ -1,7 +1,7 @@
 #pragma once
 
 #include "muduo/base/common/time_stamp.h"
-#include "muduo/base/common/noncopyable.h"
+#include "noncopyable.h"
 #include <functional>
 #include <memory>
 

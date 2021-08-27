@@ -1,4 +1,5 @@
 #include "sudokuservice.h"
+#include "src/base/muduo/base/common/logging.h"
 
 using namespace RPC;
 

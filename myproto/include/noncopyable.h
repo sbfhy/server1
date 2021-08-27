@@ -1,12 +1,17 @@
 #pragma once
 
-class Noncopyable
+namespace muduo
+{
+
+class noncopyable
 {
 public:
-  Noncopyable(const Noncopyable&) = delete;
-  void operator = (const Noncopyable&) = delete;
+  noncopyable(const noncopyable&) = delete;
+  void operator = (const noncopyable&) = delete;
 
 protected:
-  Noncopyable() = default;
-  virtual ~Noncopyable() = default;
+  noncopyable() = default;
+  virtual ~noncopyable() = default;
 };
+
+} // namespace muduo

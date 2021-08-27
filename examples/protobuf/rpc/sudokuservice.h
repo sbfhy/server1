@@ -1,11 +1,11 @@
 #pragma once
 
 #include "message/test/sudoku.pb.h"
-#include "src/base/mgr/create_service.h"
+#include "src/base/mgr/create_dynamic.h"
 
 namespace RPC {
 
-class SudokuService : public CreateService<SudokuService>
+class SudokuService : public CreateDynamicEmpty<SudokuService>
                     , public sudoku::SudokuService
 {
 public:

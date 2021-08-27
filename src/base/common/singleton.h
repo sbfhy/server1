@@ -1,6 +1,6 @@
 #pragma once
 
-#include "muduo/base/common/noncopyable.h"
+#include "noncopyable.h"
 #include "muduo/base/define/define_new.h"
 #include "src/base/mgr/mgr_base.h"
 

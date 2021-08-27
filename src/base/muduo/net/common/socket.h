@@ -1,6 +1,6 @@
 #pragma once
 
-#include "muduo/base/common/noncopyable.h"
+#include "noncopyable.h"
 
 // struct tcp_info is in <netinet/tcp.h>
 struct tcp_info;
