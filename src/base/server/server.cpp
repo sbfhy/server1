@@ -12,7 +12,8 @@
 
 // namespace {
 
-extern const SDWORD kPollTimeMs;
+/* extern const SDWORD kPollTimeMs; */
+const SDWORD kPollTimeMs_ = 10;
 
 // }   // namespace
 
@@ -30,15 +31,14 @@ void Server::Loop()
 
     while (!m_quit)
     {
-        usec = TimeStamp::now().getUSec();
-
         m_activeChannels.clear();
-        m_pollReturnTime = m_poller->poll(kPollTimeMs, &m_activeChannels);
+        m_pollReturnTime = m_poller->poll(kPollTimeMs_, &m_activeChannels);
         ++ m_iteration;
         if (Logger::getLogLevel() <= Logger::TRACE)
         {
             printActiveChannels();
         }
+        
         // TODO sort channel by priority
         m_eventHandling = true;
         for (Channel* channel : m_activeChannels)
@@ -48,10 +48,10 @@ void Server::Loop()
         }
         m_currentActiveChannel = nullptr;
         m_eventHandling = false;
+        
+        usec = TimeStamp::now().getUSec();
         doPendingFunctors();
-
         tick(usec);
-
         postUsec = TimeStamp::now().getUSec();
         frameOffset = postUsec - usec;
         if (frameOffset > m_warnFrameOffset)

@@ -33,5 +33,5 @@ private:
 private:
     ThreadPool m_threadPool;
     std::vector<MgrBase*> m_mgrs;
-    DWORD m_warnFrameOffset = 1000;    // 帧耗时警告(微秒)
+    DWORD m_warnFrameOffset = 50 * 1000;    // 帧耗时警告(微秒)
 };
