@@ -82,9 +82,9 @@ const char descriptor_table_protodef_service_2fc2g_5fuser_2eproto[] PROTOBUF_SEC
   "\n\026service/c2g_user.proto\022\003CMD\032\035service/s"
   "ervice_include.proto\"!\n\020C2G_UserLoginArg"
   "\022\r\n\005accid\030\001 \001(\004\"\'\n\020C2G_UserLoginRes\022\023\n\013a"
-  "llow_login\030\001 \001(\0102U\n\024C2G_UserLoginService"
-  "\022=\n\rC2G_UserLogin\022\025.CMD.C2G_UserLoginArg"
-  "\032\025.CMD.C2G_UserLoginResb\006proto3"
+  "llow_login\030\001 \001(\0102P\n\017C2G_UserService\022=\n\rC"
+  "2G_UserLogin\022\025.CMD.C2G_UserLoginArg\032\025.CM"
+  "D.C2G_UserLoginResb\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_service_2fc2g_5fuser_2eproto_deps[1] = {
   &::descriptor_table_service_2fservice_5finclude_2eproto,
@@ -95,7 +95,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_ser
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_service_2fc2g_5fuser_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_service_2fc2g_5fuser_2eproto = {
-  false, false, descriptor_table_protodef_service_2fc2g_5fuser_2eproto, "service/c2g_user.proto", 231,
+  false, false, descriptor_table_protodef_service_2fc2g_5fuser_2eproto, "service/c2g_user.proto", 226,
   &descriptor_table_service_2fc2g_5fuser_2eproto_once, descriptor_table_service_2fc2g_5fuser_2eproto_sccs, descriptor_table_service_2fc2g_5fuser_2eproto_deps, 2, 1,
   schemas, file_default_instances, TableStruct_service_2fc2g_5fuser_2eproto::offsets,
   file_level_metadata_service_2fc2g_5fuser_2eproto, 2, file_level_enum_descriptors_service_2fc2g_5fuser_2eproto, file_level_service_descriptors_service_2fc2g_5fuser_2eproto,
@@ -493,31 +493,31 @@ void C2G_UserLoginRes::InternalSwap(C2G_UserLoginRes* other) {
 
 // ===================================================================
 
-C2G_UserLoginService::~C2G_UserLoginService() {}
+C2G_UserService::~C2G_UserService() {}
 
-static const ::google::protobuf::ServiceDescriptor* C2G_UserLoginService_descriptor_ = NULL;
+static const ::google::protobuf::ServiceDescriptor* C2G_UserService_descriptor_ = NULL;
 
-const ::google::protobuf::ServiceDescriptor* C2G_UserLoginService::descriptor() {
+const ::google::protobuf::ServiceDescriptor* C2G_UserService::descriptor() {
   // protobuf_AssignDescriptorsOnce();
-  if (C2G_UserLoginService_descriptor_ == NULL)
-    C2G_UserLoginService_descriptor_ = ::google::protobuf::DescriptorPool::generated_pool()->FindFileByName(
+  if (C2G_UserService_descriptor_ == NULL)
+    C2G_UserService_descriptor_ = ::google::protobuf::DescriptorPool::generated_pool()->FindFileByName(
         "service/c2g_user.proto")->service(0);
-  return C2G_UserLoginService_descriptor_;
+  return C2G_UserService_descriptor_;
 }
 
-const ::google::protobuf::ServiceDescriptor* C2G_UserLoginService::GetDescriptor() {
+const ::google::protobuf::ServiceDescriptor* C2G_UserService::GetDescriptor() {
   return descriptor();
 }
 
-void C2G_UserLoginService::C2G_UserLogin(const ::CMD::C2G_UserLoginArgPtr&,
+void C2G_UserService::C2G_UserLogin(const ::CMD::C2G_UserLoginArgPtr&,
                          const ::CMD::C2G_UserLoginResPtr&) {
   assert(0);
 }
 
-void C2G_UserLoginService::CallMethod(const ::google::protobuf::MethodDescriptor* method,
+void C2G_UserService::CallMethod(const ::google::protobuf::MethodDescriptor* method,
                              const ::google::protobuf::MessagePtr& request,
                              const ::google::protobuf::MessagePtr& response) {
-  GOOGLE_DCHECK_EQ(method->service(), C2G_UserLoginService_descriptor_);
+  GOOGLE_DCHECK_EQ(method->service(), C2G_UserService_descriptor_);
   switch(method->index()) {
     case 0:
       C2G_UserLogin(::google::protobuf::down_pointer_cast<::CMD::C2G_UserLoginArg>(request),
@@ -529,10 +529,10 @@ void C2G_UserLoginService::CallMethod(const ::google::protobuf::MethodDescriptor
   }
 }
 
-void C2G_UserLoginService::DoneCallback(const ::google::protobuf::MethodDescriptor* method,
+void C2G_UserService::DoneCallback(const ::google::protobuf::MethodDescriptor* method,
                                const ::google::protobuf::MessagePtr& request,
                                const ::google::protobuf::MessagePtr& response) {
-  GOOGLE_DCHECK_EQ(method->service(), C2G_UserLoginService_descriptor_);
+  GOOGLE_DCHECK_EQ(method->service(), C2G_UserService_descriptor_);
   switch(method->index()) {
     case 0:
       C2G_UserLogin_DoneCb(::google::protobuf::down_pointer_cast<::CMD::C2G_UserLoginArg>(request),
@@ -544,9 +544,9 @@ void C2G_UserLoginService::DoneCallback(const ::google::protobuf::MethodDescript
   }
 }
 
-void C2G_UserLoginService::TimeOut(const ::google::protobuf::MethodDescriptor* method,
+void C2G_UserService::TimeOut(const ::google::protobuf::MethodDescriptor* method,
                           const ::google::protobuf::MessagePtr& request) {
-  GOOGLE_DCHECK_EQ(method->service(), C2G_UserLoginService_descriptor_);
+  GOOGLE_DCHECK_EQ(method->service(), C2G_UserService_descriptor_);
   switch(method->index()) {
     case 0:
       C2G_UserLogin_TimeOut(::google::protobuf::down_pointer_cast<::CMD::C2G_UserLoginArg>(request));
@@ -557,10 +557,10 @@ void C2G_UserLoginService::TimeOut(const ::google::protobuf::MethodDescriptor* m
   }
 }
 
-void C2G_UserLoginService::DelayResponse(const ::google::protobuf::MethodDescriptor* method,
+void C2G_UserService::DelayResponse(const ::google::protobuf::MethodDescriptor* method,
                                 const ::google::protobuf::MessagePtr& request,
                                 const ::google::protobuf::MessagePtr& response) {
-  GOOGLE_DCHECK_EQ(method->service(), C2G_UserLoginService_descriptor_);
+  GOOGLE_DCHECK_EQ(method->service(), C2G_UserService_descriptor_);
   switch(method->index()) {
     case 0:
       C2G_UserLogin_DelayResponse(::google::protobuf::down_pointer_cast<::CMD::C2G_UserLoginArg>(request),
@@ -572,7 +572,7 @@ void C2G_UserLoginService::DelayResponse(const ::google::protobuf::MethodDescrip
   }
 }
 
-const ::google::protobuf::Message& C2G_UserLoginService::GetRequestPrototype(
+const ::google::protobuf::Message& C2G_UserService::GetRequestPrototype(
     const ::google::protobuf::MethodDescriptor* method) const {
   GOOGLE_DCHECK_EQ(method->service(), descriptor());
   switch(method->index()) {
@@ -584,7 +584,7 @@ const ::google::protobuf::Message& C2G_UserLoginService::GetRequestPrototype(
   }
 }
 
-const ::google::protobuf::Message& C2G_UserLoginService::GetResponsePrototype(
+const ::google::protobuf::Message& C2G_UserService::GetResponsePrototype(
     const ::google::protobuf::MethodDescriptor* method) const {
   GOOGLE_DCHECK_EQ(method->service(), descriptor());
   switch(method->index()) {
@@ -596,16 +596,16 @@ const ::google::protobuf::Message& C2G_UserLoginService::GetResponsePrototype(
   }
 }
 
-C2G_UserLoginService_Stub::C2G_UserLoginService_Stub(::muduo::net::RpcChannelBase* channel__)
+C2G_UserService_Stub::C2G_UserService_Stub(::muduo::net::RpcChannelBase* channel__)
     : channel_(channel__), owns_channel_(false) 
 {
 }
 
-C2G_UserLoginService_Stub::~C2G_UserLoginService_Stub() 
+C2G_UserService_Stub::~C2G_UserService_Stub() 
 {
 }
 
-void C2G_UserLoginService_Stub::C2G_UserLogin(const ::CMD::C2G_UserLoginArgPtr& request,
+void C2G_UserService_Stub::C2G_UserLogin(const ::CMD::C2G_UserLoginArgPtr& request,
                               const ::CMD::C2G_UserLoginResPtr& response) 
 {
   channel_->CallMethod(descriptor()->method(0),

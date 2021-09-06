@@ -411,16 +411,16 @@ typedef     ::std::shared_ptr<C2G_UserLoginRes>     C2G_UserLoginResPtr;
 
 // -------------------------------------------------------------------
 
-class C2G_UserLoginService_Stub;
+class C2G_UserService_Stub;
 
-class C2G_UserLoginService : public ::muduo::net::Service {
+class C2G_UserService : public ::muduo::net::Service {
  protected:
   // This class should be treated as an abstract interface.
-  inline C2G_UserLoginService() {};
+  inline C2G_UserService() {};
  public:
-  virtual ~C2G_UserLoginService();
+  virtual ~C2G_UserService();
 
-  typedef C2G_UserLoginService_Stub Stub;
+  typedef C2G_UserService_Stub Stub;
 
   static const ::google::protobuf::ServiceDescriptor* descriptor();
 
@@ -457,18 +457,18 @@ class C2G_UserLoginService : public ::muduo::net::Service {
                      const ::google::protobuf::MessagePtr& response);
 
  private:
-  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(C2G_UserLoginService);
+  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(C2G_UserService);
 };
 
-class C2G_UserLoginService_Stub : public C2G_UserLoginService {
+class C2G_UserService_Stub : public C2G_UserService {
  public:
-  C2G_UserLoginService_Stub() {} 
-  C2G_UserLoginService_Stub(::muduo::net::RpcChannelBase* channel);
-  ~C2G_UserLoginService_Stub();
+  C2G_UserService_Stub() {} 
+  C2G_UserService_Stub(::muduo::net::RpcChannelBase* channel);
+  ~C2G_UserService_Stub();
 
   inline ::muduo::net::RpcChannelBase* channel() { return channel_; }
 
-  // implements C2G_UserLoginService ------------------------------------------
+  // implements C2G_UserService ------------------------------------------
 
   virtual void C2G_UserLogin(const ::CMD::C2G_UserLoginArgPtr& request,
                        const ::CMD::C2G_UserLoginResPtr& response);
@@ -476,7 +476,7 @@ class C2G_UserLoginService_Stub : public C2G_UserLoginService {
  private:
   muduo::net::RpcChannelBase* channel_;
   bool owns_channel_;
-  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(C2G_UserLoginService_Stub);
+  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(C2G_UserService_Stub);
 };
 
 // @@protoc_insertion_point(namespace_scope)

@@ -72,6 +72,9 @@ public:
   static LogLevel getLogLevel();                        // 日志等级
   static void setLogLevel(LogLevel level);
 
+  static void SetLogging(const char* exePath, off_t rollSize);
+  static void LogFlush();
+
 private:
 
   // 内部嵌套类，包含一个LogStream。

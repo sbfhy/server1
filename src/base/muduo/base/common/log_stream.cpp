@@ -164,8 +164,8 @@ LogStream& LogStream::operator<<(const void* p)
   if (m_buffer.avail() >= kMaxNumericSize)
   {
     CHAR* buf = m_buffer.current();
-    size_t len = detail::convertHex(buf + 2, v);        // 将这个指针转成16进制，存入m_buffer
-    m_buffer.add(len + 2);
+    size_t len = detail::convertHex(buf, v);        // 将这个指针转成16进制，存入m_buffer
+    m_buffer.add(len);
   }
   return *this;
 }

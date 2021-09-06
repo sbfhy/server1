@@ -240,15 +240,18 @@ class RpcMessage PROTOBUF_FINAL :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kRequestFieldNumber = 5,
-    kResponseFieldNumber = 6,
+    kRequestFieldNumber = 8,
+    kResponseFieldNumber = 9,
     kIdFieldNumber = 2,
     kTypeFieldNumber = 1,
     kServiceFieldNumber = 3,
-    kMethodFieldNumber = 4,
-    kErrorFieldNumber = 7,
+    kFromFieldNumber = 4,
+    kToFieldNumber = 5,
+    kAccidFieldNumber = 6,
+    kMethodFieldNumber = 7,
+    kErrorFieldNumber = 10,
   };
-  // bytes request = 5;
+  // bytes request = 8;
   void clear_request();
   const std::string& request() const;
   void set_request(const std::string& value);
@@ -264,7 +267,7 @@ class RpcMessage PROTOBUF_FINAL :
   std::string* _internal_mutable_request();
   public:
 
-  // bytes response = 6;
+  // bytes response = 9;
   void clear_response();
   const std::string& response() const;
   void set_response(const std::string& value);
@@ -307,7 +310,34 @@ class RpcMessage PROTOBUF_FINAL :
   void _internal_set_service(::ENUM::EServiceType value);
   public:
 
-  // int32 method = 4;
+  // .ENUM.EServerType from = 4;
+  void clear_from();
+  ::ENUM::EServerType from() const;
+  void set_from(::ENUM::EServerType value);
+  private:
+  ::ENUM::EServerType _internal_from() const;
+  void _internal_set_from(::ENUM::EServerType value);
+  public:
+
+  // .ENUM.EServerType to = 5;
+  void clear_to();
+  ::ENUM::EServerType to() const;
+  void set_to(::ENUM::EServerType value);
+  private:
+  ::ENUM::EServerType _internal_to() const;
+  void _internal_set_to(::ENUM::EServerType value);
+  public:
+
+  // uint64 accid = 6;
+  void clear_accid();
+  ::PROTOBUF_NAMESPACE_ID::uint64 accid() const;
+  void set_accid(::PROTOBUF_NAMESPACE_ID::uint64 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::uint64 _internal_accid() const;
+  void _internal_set_accid(::PROTOBUF_NAMESPACE_ID::uint64 value);
+  public:
+
+  // int32 method = 7;
   void clear_method();
   ::PROTOBUF_NAMESPACE_ID::int32 method() const;
   void set_method(::PROTOBUF_NAMESPACE_ID::int32 value);
@@ -316,7 +346,7 @@ class RpcMessage PROTOBUF_FINAL :
   void _internal_set_method(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
-  // .muduo.net.ErrorCode error = 7;
+  // .muduo.net.ErrorCode error = 10;
   void clear_error();
   ::muduo::net::ErrorCode error() const;
   void set_error(::muduo::net::ErrorCode value);
@@ -337,6 +367,9 @@ class RpcMessage PROTOBUF_FINAL :
   ::PROTOBUF_NAMESPACE_ID::uint64 id_;
   int type_;
   int service_;
+  int from_;
+  int to_;
+  ::PROTOBUF_NAMESPACE_ID::uint64 accid_;
   ::PROTOBUF_NAMESPACE_ID::int32 method_;
   int error_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -421,7 +454,67 @@ inline void RpcMessage::set_service(::ENUM::EServiceType value) {
   // @@protoc_insertion_point(field_set:muduo.net.RpcMessage.service)
 }
 
-// int32 method = 4;
+// .ENUM.EServerType from = 4;
+inline void RpcMessage::clear_from() {
+  from_ = 0;
+}
+inline ::ENUM::EServerType RpcMessage::_internal_from() const {
+  return static_cast< ::ENUM::EServerType >(from_);
+}
+inline ::ENUM::EServerType RpcMessage::from() const {
+  // @@protoc_insertion_point(field_get:muduo.net.RpcMessage.from)
+  return _internal_from();
+}
+inline void RpcMessage::_internal_set_from(::ENUM::EServerType value) {
+  
+  from_ = value;
+}
+inline void RpcMessage::set_from(::ENUM::EServerType value) {
+  _internal_set_from(value);
+  // @@protoc_insertion_point(field_set:muduo.net.RpcMessage.from)
+}
+
+// .ENUM.EServerType to = 5;
+inline void RpcMessage::clear_to() {
+  to_ = 0;
+}
+inline ::ENUM::EServerType RpcMessage::_internal_to() const {
+  return static_cast< ::ENUM::EServerType >(to_);
+}
+inline ::ENUM::EServerType RpcMessage::to() const {
+  // @@protoc_insertion_point(field_get:muduo.net.RpcMessage.to)
+  return _internal_to();
+}
+inline void RpcMessage::_internal_set_to(::ENUM::EServerType value) {
+  
+  to_ = value;
+}
+inline void RpcMessage::set_to(::ENUM::EServerType value) {
+  _internal_set_to(value);
+  // @@protoc_insertion_point(field_set:muduo.net.RpcMessage.to)
+}
+
+// uint64 accid = 6;
+inline void RpcMessage::clear_accid() {
+  accid_ = PROTOBUF_ULONGLONG(0);
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint64 RpcMessage::_internal_accid() const {
+  return accid_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint64 RpcMessage::accid() const {
+  // @@protoc_insertion_point(field_get:muduo.net.RpcMessage.accid)
+  return _internal_accid();
+}
+inline void RpcMessage::_internal_set_accid(::PROTOBUF_NAMESPACE_ID::uint64 value) {
+  
+  accid_ = value;
+}
+inline void RpcMessage::set_accid(::PROTOBUF_NAMESPACE_ID::uint64 value) {
+  _internal_set_accid(value);
+  // @@protoc_insertion_point(field_set:muduo.net.RpcMessage.accid)
+}
+
+// int32 method = 7;
 inline void RpcMessage::clear_method() {
   method_ = 0;
 }
@@ -441,7 +534,7 @@ inline void RpcMessage::set_method(::PROTOBUF_NAMESPACE_ID::int32 value) {
   // @@protoc_insertion_point(field_set:muduo.net.RpcMessage.method)
 }
 
-// bytes request = 5;
+// bytes request = 8;
 inline void RpcMessage::clear_request() {
   request_.ClearToEmpty();
 }
@@ -502,7 +595,7 @@ inline void RpcMessage::set_allocated_request(std::string* request) {
   // @@protoc_insertion_point(field_set_allocated:muduo.net.RpcMessage.request)
 }
 
-// bytes response = 6;
+// bytes response = 9;
 inline void RpcMessage::clear_response() {
   response_.ClearToEmpty();
 }
@@ -563,7 +656,7 @@ inline void RpcMessage::set_allocated_response(std::string* response) {
   // @@protoc_insertion_point(field_set_allocated:muduo.net.RpcMessage.response)
 }
 
-// .muduo.net.ErrorCode error = 7;
+// .muduo.net.ErrorCode error = 10;
 inline void RpcMessage::clear_error() {
   error_ = 0;
 }

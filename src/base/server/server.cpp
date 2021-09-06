@@ -17,6 +17,12 @@ const SDWORD kPollTimeMs_ = 10;
 
 // }   // namespace
 
+Server::Server(const ServerArgs& args)
+    : m_args(args)
+{
+
+}
+
 void Server::Loop()
 {
     assert(!m_looping);
@@ -66,6 +72,7 @@ void Server::Loop()
 
 void Server::wake()
 {
+    registerSignal();
     registerMgrs();
     for (auto mgr : m_mgrs)
     {
@@ -78,9 +85,9 @@ void Server::wake()
 
 void Server::Start()
 {
-    m_threadPool.start(1);
     wake();
     init();
+    m_threadPool.start(1);
 }
 
 void Server::Run()
@@ -103,7 +110,7 @@ void Server::tick(QWORD usec)
 void Server::listen()
 {
     EventLoop loop;
-    InetAddress listenAddr(9981);
+    InetAddress listenAddr(m_args.port);
     RpcServer server(shared_from_this(), &loop, listenAddr);
     server.setThreadNum(1);
     server.start();
@@ -124,4 +131,30 @@ void Server::init()
 void Server::addMgr(MgrBase* mgr)
 {
     m_mgrs.push_back(mgr);
+}
+
+void sig_handler(int sig_no)
+{
+    LOG_DEBUG << "signal : " << sig_no;
+    Logger::LogFlush();
+    exit(1);
+}
+
+void Server::registerSignal()
+{
+    struct sigaction act;
+
+    memset(&act, 0, sizeof(act));                   // 初始化信号结构
+    act.sa_handler = sig_handler;                   // 设置信号处理函数
+
+    if (sigaction(SIGINT, &act, NULL) < 0) {        // 注册 SIGINT 信号
+        perror("sigaction");
+        exit(1);
+    }
+
+    if (sigaction(SIGQUIT, &act, NULL) < 0) {       // 注册 SIGQUIT 信号
+        perror("sigaction");
+        exit(1);
+    }
+
 }

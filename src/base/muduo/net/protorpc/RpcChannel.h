@@ -125,7 +125,7 @@ public:
 
     explicit RpcChannel(const TcpConnectionPtr &conn);
 
-    ~RpcChannel();
+    virtual ~RpcChannel();
 
     void setConnection(const TcpConnectionPtr &conn) { conn_ = conn; }
 
@@ -139,16 +139,17 @@ public:
                    Buffer *buf,
                    TimeStamp receiveTime);
 
+protected:
+    void onRpcMessage(const TcpConnectionPtr &conn,
+                      const RpcMessagePtr &messagePtr,
+                      TimeStamp receiveTime);
+    void serviceHandleRequestMsg(const RpcMessage &message);    // Service处理request消息
+    void stubHandleResponseMsg(const RpcMessage &message);      // Stub处理response消息
+
 private:
     void onRpcMessageInMainLoop(const TcpConnectionPtr &conn,
                                 const RpcMessagePtr &messagePtr,
                                 TimeStamp receiveTime);
-    void onRpcMessage(const TcpConnectionPtr &conn,
-                      const RpcMessagePtr &messagePtr,
-                      TimeStamp receiveTime);
-
-    void serviceHandleRequestMsg(const RpcMessage &message);    // Service处理request消息
-    void stubHandleResponseMsg(const RpcMessage &message);      // Stub处理response消息
 
     void doneCallbackInIoLoop(::google::protobuf::MessagePtr response,
                               int64_t id);
@@ -157,7 +158,7 @@ private:
 
     void requestTimeOut(int64_t id);
 
-private:
+protected:
     struct OutstandingCall
     {
         ::google::protobuf::MessagePtr request = nullptr;

@@ -4,13 +4,22 @@
 // Author: Shuo Chen (chenshuo at chenshuo dot com)
 
 #include "muduo/base/common/async_logging.h"
+
 #include "muduo/base/common/logfile.h"
 #include "muduo/base/common/time_stamp.h"
+#include "muduo/base/common/logging.h"
 #include "muduo/base/define/define_new.h"
 
 #include <stdio.h>
 
 using namespace muduo;
+
+std::unique_ptr<muduo::AsyncLogging> g_asyncLog;
+
+void asyncOutput(const char* msg, int len)
+{
+    g_asyncLog->append(msg, len);
+}
 
 AsyncLogging::AsyncLogging(const std::string& basename, off_t rollSize, SDWORD flushInterval)
   : m_flushInterval(flushInterval)
@@ -131,3 +140,9 @@ void AsyncLogging::threadFunc()
   output.flush();
 }
 
+void AsyncLogging::SetAsyncLog(const char* baseName, off_t rollSize)
+{
+    g_asyncLog.reset(NEW muduo::AsyncLogging(baseName, rollSize));
+    g_asyncLog->start();
+    muduo::Logger::setOutputFunc(asyncOutput);
+}

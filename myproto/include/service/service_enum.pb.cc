@@ -17,23 +17,29 @@
 namespace ENUM {
 }  // namespace ENUM
 static constexpr ::PROTOBUF_NAMESPACE_ID::Metadata* file_level_metadata_service_2fservice_5fenum_2eproto = nullptr;
-static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_service_2fservice_5fenum_2eproto[1];
+static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_service_2fservice_5fenum_2eproto[2];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_service_2fservice_5fenum_2eproto = nullptr;
 const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_service_2fservice_5fenum_2eproto::offsets[1] = {};
 static constexpr ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema* schemas = nullptr;
 static constexpr ::PROTOBUF_NAMESPACE_ID::Message* const* file_default_instances = nullptr;
 
 const char descriptor_table_protodef_service_2fservice_5fenum_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\032service/service_enum.proto\022\004ENUM*\304\002\n\014E"
+  "\n\032service/service_enum.proto\022\004ENUM*\207\003\n\014E"
   "ServiceType\022\023\n\017SERVICETYPE_MIN\020\000\022\013\n\007C2G_"
-  "MIN\020\001\022\030\n\024C2G_UserLoginService\020\002\022\035\n\031C2G_U"
-  "serLoginService_Stub\020\003\022\031\n\025C2G_SceneEntry"
-  "Service\020\004\022\036\n\032C2G_SceneEntryService_Stub\020"
-  "\005\022\014\n\007C2G_MAX\020\360\001\022\014\n\007G2C_MIN\020\361\001\022\025\n\020G2C_Sce"
-  "neService\020\362\001\022\032\n\025G2C_SceneService_Stub\020\363\001"
-  "\022\014\n\007G2C_MAX\020\340\003\022\022\n\rSudokuService\020\365\003\022\027\n\022Su"
-  "dokuService_Stub\020\366\003\022\024\n\017SERVICETYPE_MAX\020\200"
-  "\010b\006proto3"
+  "MIN\020\001\022\023\n\017C2G_UserService\020\002\022\030\n\024C2G_UserSe"
+  "rvice_Stub\020\003\022\031\n\025C2G_SceneEntryService\020\004\022"
+  "\036\n\032C2G_SceneEntryService_Stub\020\005\022\014\n\007C2G_M"
+  "AX\020\360\001\022\014\n\007G2C_MIN\020\361\001\022\025\n\020G2C_SceneService\020"
+  "\362\001\022\032\n\025G2C_SceneService_Stub\020\363\001\022\014\n\007G2C_MA"
+  "X\020\340\003\022\014\n\007C2A_MIN\020\341\003\022\024\n\017C2A_UserService\020\342\003"
+  "\022\031\n\024C2A_UserService_Stub\020\343\003\022\014\n\007C2A_MAX\020\210"
+  "\004\022\022\n\rSudokuService\020\351\007\022\027\n\022SudokuService_S"
+  "tub\020\352\007\022\024\n\017SERVICETYPE_MAX\020\200\010*\276\001\n\013EServer"
+  "Type\022\023\n\017ESERVERTYPE_MIN\020\000\022\032\n\026ESERVERTYPE"
+  "_GATESERVER\020\001\022\032\n\026ESERVERTYPE_GAMESERVER\020"
+  "\002\022\030\n\024ESERVERTYPE_DBSERVER\020\003\022\033\n\027ESERVERTY"
+  "PE_LOGINSERVER\020\004\022\026\n\022ESERVERTYPE_CLIENT\020\005"
+  "\022\023\n\017ESERVERTYPE_MAX\020\006b\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_service_2fservice_5fenum_2eproto_deps[1] = {
 };
@@ -41,7 +47,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_ser
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_service_2fservice_5fenum_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_service_2fservice_5fenum_2eproto = {
-  false, false, descriptor_table_protodef_service_2fservice_5fenum_2eproto, "service/service_enum.proto", 369,
+  false, false, descriptor_table_protodef_service_2fservice_5fenum_2eproto, "service/service_enum.proto", 629,
   &descriptor_table_service_2fservice_5fenum_2eproto_once, descriptor_table_service_2fservice_5fenum_2eproto_sccs, descriptor_table_service_2fservice_5fenum_2eproto_deps, 0, 0,
   schemas, file_default_instances, TableStruct_service_2fservice_5fenum_2eproto::offsets,
   file_level_metadata_service_2fservice_5fenum_2eproto, 0, file_level_enum_descriptors_service_2fservice_5fenum_2eproto, file_level_service_descriptors_service_2fservice_5fenum_2eproto,
@@ -67,9 +73,32 @@ bool EServiceType_IsValid(int value) {
     case 242:
     case 243:
     case 480:
-    case 501:
-    case 502:
+    case 481:
+    case 482:
+    case 483:
+    case 520:
+    case 1001:
+    case 1002:
     case 1024:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* EServerType_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_service_2fservice_5fenum_2eproto);
+  return file_level_enum_descriptors_service_2fservice_5fenum_2eproto[1];
+}
+bool EServerType_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
       return true;
     default:
       return false;

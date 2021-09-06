@@ -4,9 +4,10 @@ project(rpcserver1)
 
 cmake_policy(SET CMP0015 NEW) # 设置cmake方案 CMP0015 https://cmake.org/cmake/help/v3.0/policy/CMP0015.html
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/)  # 设置cmake模块路径
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)         # 设置生成执行文件的目录
-set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)            # 设置生成库文件的目录
+set(binDir ${PROJECT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE})                   # bin/debug目录
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/)      # 设置cmake模块路径
+set(EXECUTABLE_OUTPUT_PATH ${binDir})                                       # 设置生成执行文件的目录
+set(LIBRARY_OUTPUT_PATH ${binDir}/lib/)                                     # 设置生成库文件的目录
 
 string(TOUPPER ${CMAKE_BUILD_TYPE} BUILD_TYPE)                # 转成大写，输出到变量BUILD_TYPE
 message(STATUS "CXX_FLAGS = " ${CMAKE_CXX_FLAGS} " " ${CMAKE_CXX_FLAGS_${BUILD_TYPE}})

@@ -1,4 +1,6 @@
 #include "muduo/base/common/logfile.h"
+
+#include "muduo/base/common/logging.h"
 #include "muduo/base/common/file_util.h"
 #include "muduo/base/common/process_info.h"
 #include "muduo/base/define/define_new.h"
@@ -10,7 +12,19 @@
 
 using namespace muduo;
 
-std::string LogFile::s_fileDir = "";
+std::string LogFile::s_fileDir = "log/";
+std::unique_ptr<muduo::LogFile> g_logFile;
+
+void outputFunc(const CHAR* msg, SDWORD len)
+{
+  g_logFile->append(msg, len);
+}
+
+void flushFunc()
+{
+  g_logFile->flush();
+}
+
 
 LogFile::LogFile(const std::string& basename, off_t rollSize,
                  bool threadSafe, SDWORD flushInterval, SDWORD checkEveryN)
@@ -99,7 +113,14 @@ bool LogFile::RollFile()
   }
   return false;
 }
-  
+
+void LogFile::SetLogFile(const char* exePath, const char* baseName, off_t rollSize)
+{
+    g_logFile.reset(NEW muduo::LogFile(baseName, rollSize));
+    muduo::Logger::setOutputFunc(outputFunc);
+    muduo::Logger::setFlushFunc(flushFunc);
+}
+
 void LogFile::setLogFileDir(const char* fileDir)
 {
   s_fileDir = ::dirname(const_cast<char*>(fileDir));
@@ -116,12 +137,12 @@ std::string LogFile::getLogFileName(const std::string& basename, time_t* now)
   *now = time(nullptr);
   //gmtime_r(now, &tm);                                   // FIXME: localtime_r ?
   localtime_r(now, &tm);
-  strftime(timebuf, sizeof timebuf, ".%Y%m%d-%H%M%S.", &tm);
+  strftime(timebuf, sizeof timebuf, "_%Y%m%d_%H%M%S_", &tm);
   filename += timebuf;
-  filename += ProcessInfo::hostname();
+//   filename += ProcessInfo::hostname();
   
   CHAR pidbuf[32];
-  snprintf(pidbuf, sizeof pidbuf, ".%d", ProcessInfo::pid());
+  snprintf(pidbuf, sizeof pidbuf, "%d", ProcessInfo::pid());
   filename += pidbuf;
   filename += ".log";
   return filename;

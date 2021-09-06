@@ -59,8 +59,8 @@ namespace ENUM {
 enum EServiceType : int {
   SERVICETYPE_MIN = 0,
   C2G_MIN = 1,
-  C2G_UserLoginService = 2,
-  C2G_UserLoginService_Stub = 3,
+  C2G_UserService = 2,
+  C2G_UserService_Stub = 3,
   C2G_SceneEntryService = 4,
   C2G_SceneEntryService_Stub = 5,
   C2G_MAX = 240,
@@ -68,8 +68,12 @@ enum EServiceType : int {
   G2C_SceneService = 242,
   G2C_SceneService_Stub = 243,
   G2C_MAX = 480,
-  SudokuService = 501,
-  SudokuService_Stub = 502,
+  C2A_MIN = 481,
+  C2A_UserService = 482,
+  C2A_UserService_Stub = 483,
+  C2A_MAX = 520,
+  SudokuService = 1001,
+  SudokuService_Stub = 1002,
   SERVICETYPE_MAX = 1024,
   EServiceType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
   EServiceType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
@@ -92,6 +96,36 @@ inline bool EServiceType_Parse(
     ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, EServiceType* value) {
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<EServiceType>(
     EServiceType_descriptor(), name, value);
+}
+enum EServerType : int {
+  ESERVERTYPE_MIN = 0,
+  ESERVERTYPE_GATESERVER = 1,
+  ESERVERTYPE_GAMESERVER = 2,
+  ESERVERTYPE_DBSERVER = 3,
+  ESERVERTYPE_LOGINSERVER = 4,
+  ESERVERTYPE_CLIENT = 5,
+  ESERVERTYPE_MAX = 6,
+  EServerType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
+  EServerType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
+};
+bool EServerType_IsValid(int value);
+constexpr EServerType EServerType_MIN = ESERVERTYPE_MIN;
+constexpr EServerType EServerType_MAX = ESERVERTYPE_MAX;
+constexpr int EServerType_ARRAYSIZE = EServerType_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* EServerType_descriptor();
+template<typename T>
+inline const std::string& EServerType_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, EServerType>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function EServerType_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    EServerType_descriptor(), enum_t_value);
+}
+inline bool EServerType_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, EServerType* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<EServerType>(
+    EServerType_descriptor(), name, value);
 }
 // ===================================================================
 
@@ -119,6 +153,11 @@ template <> struct is_proto_enum< ::ENUM::EServiceType> : ::std::true_type {};
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::ENUM::EServiceType>() {
   return ::ENUM::EServiceType_descriptor();
+}
+template <> struct is_proto_enum< ::ENUM::EServerType> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::ENUM::EServerType>() {
+  return ::ENUM::EServerType_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE

@@ -47,8 +47,8 @@ void RpcServer::start()
 void RpcServer::onConnection(const TcpConnectionPtr& conn)
 {
   LOG_INFO << "RpcServer - " << conn->getPeerAddress().toIpPort() << " -> "
-        << conn->getLocalAddress().toIpPort() << " is "
-        << (conn->IsConnected() ? "UP" : "DOWN");
+           << conn->getLocalAddress().toIpPort() << " is "
+           << (conn->IsConnected() ? "UP" : "DOWN");
   if (conn->IsConnected())
   {
     RpcChannelPtr channel(new RpcChannel(conn));

@@ -48,6 +48,9 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_message_2fcommon_2frpc_2eproto
   PROTOBUF_FIELD_OFFSET(::muduo::net::RpcMessage, type_),
   PROTOBUF_FIELD_OFFSET(::muduo::net::RpcMessage, id_),
   PROTOBUF_FIELD_OFFSET(::muduo::net::RpcMessage, service_),
+  PROTOBUF_FIELD_OFFSET(::muduo::net::RpcMessage, from_),
+  PROTOBUF_FIELD_OFFSET(::muduo::net::RpcMessage, to_),
+  PROTOBUF_FIELD_OFFSET(::muduo::net::RpcMessage, accid_),
   PROTOBUF_FIELD_OFFSET(::muduo::net::RpcMessage, method_),
   PROTOBUF_FIELD_OFFSET(::muduo::net::RpcMessage, request_),
   PROTOBUF_FIELD_OFFSET(::muduo::net::RpcMessage, response_),
@@ -64,21 +67,23 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 const char descriptor_table_protodef_message_2fcommon_2frpc_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\030message/common/rpc.proto\022\tmuduo.net\032 g"
   "oogle/protobuf/descriptor.proto\032\032service"
-  "/service_enum.proto\"\273\001\n\nRpcMessage\022$\n\004ty"
+  "/service_enum.proto\"\212\002\n\nRpcMessage\022$\n\004ty"
   "pe\030\001 \001(\0162\026.muduo.net.MessageType\022\n\n\002id\030\002"
   " \001(\006\022#\n\007service\030\003 \001(\0162\022.ENUM.EServiceTyp"
-  "e\022\016\n\006method\030\004 \001(\005\022\017\n\007request\030\005 \001(\014\022\020\n\010re"
-  "sponse\030\006 \001(\014\022#\n\005error\030\007 \001(\0162\024.muduo.net."
-  "ErrorCode*`\n\013MessageType\022\023\n\017MSGTYPE_DEFA"
-  "ULT\020\000\022\023\n\017MSGTYPE_REQUEST\020\001\022\024\n\020MSGTYPE_RE"
-  "SPONSE\020\002\022\021\n\rMSGTYPE_ERROR\020\003*\235\001\n\tErrorCod"
-  "e\022\020\n\014ERR_NO_ERROR\020\000\022\023\n\017ERR_WRONG_PROTO\020\001"
-  "\022\022\n\016ERR_NO_SERVICE\020\002\022\021\n\rERR_NO_METHOD\020\003\022"
-  "\027\n\023ERR_INVALID_REQUEST\020\004\022\030\n\024ERR_INVALID_"
-  "RESPONSE\020\005\022\017\n\013ERR_TIMEOUT\020\006:3\n\nidempoten"
-  "t\022\036.google.protobuf.MethodOptions\030\327\010 \001(\010"
-  ":1\n\010noreturn\022\036.google.protobuf.MethodOpt"
-  "ions\030\330\010 \001(\010b\006proto3"
+  "e\022\037\n\004from\030\004 \001(\0162\021.ENUM.EServerType\022\035\n\002to"
+  "\030\005 \001(\0162\021.ENUM.EServerType\022\r\n\005accid\030\006 \001(\004"
+  "\022\016\n\006method\030\007 \001(\005\022\017\n\007request\030\010 \001(\014\022\020\n\010res"
+  "ponse\030\t \001(\014\022#\n\005error\030\n \001(\0162\024.muduo.net.E"
+  "rrorCode*`\n\013MessageType\022\023\n\017MSGTYPE_DEFAU"
+  "LT\020\000\022\023\n\017MSGTYPE_REQUEST\020\001\022\024\n\020MSGTYPE_RES"
+  "PONSE\020\002\022\021\n\rMSGTYPE_ERROR\020\003*\235\001\n\tErrorCode"
+  "\022\020\n\014ERR_NO_ERROR\020\000\022\023\n\017ERR_WRONG_PROTO\020\001\022"
+  "\022\n\016ERR_NO_SERVICE\020\002\022\021\n\rERR_NO_METHOD\020\003\022\027"
+  "\n\023ERR_INVALID_REQUEST\020\004\022\030\n\024ERR_INVALID_R"
+  "ESPONSE\020\005\022\017\n\013ERR_TIMEOUT\020\006:3\n\nidempotent"
+  "\022\036.google.protobuf.MethodOptions\030\327\010 \001(\010:"
+  "1\n\010noreturn\022\036.google.protobuf.MethodOpti"
+  "ons\030\330\010 \001(\010b\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_message_2fcommon_2frpc_2eproto_deps[2] = {
   &::descriptor_table_google_2fprotobuf_2fdescriptor_2eproto,
@@ -89,7 +94,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_mes
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_message_2fcommon_2frpc_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_message_2fcommon_2frpc_2eproto = {
-  false, false, descriptor_table_protodef_message_2fcommon_2frpc_2eproto, "message/common/rpc.proto", 659,
+  false, false, descriptor_table_protodef_message_2fcommon_2frpc_2eproto, "message/common/rpc.proto", 738,
   &descriptor_table_message_2fcommon_2frpc_2eproto_once, descriptor_table_message_2fcommon_2frpc_2eproto_sccs, descriptor_table_message_2fcommon_2frpc_2eproto_deps, 1, 2,
   schemas, file_default_instances, TableStruct_message_2fcommon_2frpc_2eproto::offsets,
   file_level_metadata_message_2fcommon_2frpc_2eproto, 1, file_level_enum_descriptors_message_2fcommon_2frpc_2eproto, file_level_service_descriptors_message_2fcommon_2frpc_2eproto,
@@ -247,32 +252,55 @@ const char* RpcMessage::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID:
           _internal_set_service(static_cast<::ENUM::EServiceType>(val));
         } else goto handle_unusual;
         continue;
-      // int32 method = 4;
+      // .ENUM.EServerType from = 4;
       case 4:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 32)) {
+          ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_from(static_cast<::ENUM::EServerType>(val));
+        } else goto handle_unusual;
+        continue;
+      // .ENUM.EServerType to = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 40)) {
+          ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_to(static_cast<::ENUM::EServerType>(val));
+        } else goto handle_unusual;
+        continue;
+      // uint64 accid = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 48)) {
+          accid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 method = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 56)) {
           method_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // bytes request = 5;
-      case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 42)) {
+      // bytes request = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 66)) {
           auto str = _internal_mutable_request();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // bytes response = 6;
-      case 6:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 50)) {
+      // bytes response = 9;
+      case 9:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 74)) {
           auto str = _internal_mutable_response();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // .muduo.net.ErrorCode error = 7;
-      case 7:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 56)) {
+      // .muduo.net.ErrorCode error = 10;
+      case 10:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 80)) {
           ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
           _internal_set_error(static_cast<::muduo::net::ErrorCode>(val));
@@ -326,29 +354,49 @@ failure:
       3, this->_internal_service(), target);
   }
 
-  // int32 method = 4;
+  // .ENUM.EServerType from = 4;
+  if (this->from() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
+      4, this->_internal_from(), target);
+  }
+
+  // .ENUM.EServerType to = 5;
+  if (this->to() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
+      5, this->_internal_to(), target);
+  }
+
+  // uint64 accid = 6;
+  if (this->accid() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt64ToArray(6, this->_internal_accid(), target);
+  }
+
+  // int32 method = 7;
   if (this->method() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(4, this->_internal_method(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(7, this->_internal_method(), target);
   }
 
-  // bytes request = 5;
+  // bytes request = 8;
   if (this->request().size() > 0) {
     target = stream->WriteBytesMaybeAliased(
-        5, this->_internal_request(), target);
+        8, this->_internal_request(), target);
   }
 
-  // bytes response = 6;
+  // bytes response = 9;
   if (this->response().size() > 0) {
     target = stream->WriteBytesMaybeAliased(
-        6, this->_internal_response(), target);
+        9, this->_internal_response(), target);
   }
 
-  // .muduo.net.ErrorCode error = 7;
+  // .muduo.net.ErrorCode error = 10;
   if (this->error() != 0) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
-      7, this->_internal_error(), target);
+      10, this->_internal_error(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -367,14 +415,14 @@ size_t RpcMessage::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // bytes request = 5;
+  // bytes request = 8;
   if (this->request().size() > 0) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
         this->_internal_request());
   }
 
-  // bytes response = 6;
+  // bytes response = 9;
   if (this->response().size() > 0) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
@@ -398,14 +446,33 @@ size_t RpcMessage::ByteSizeLong() const {
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_service());
   }
 
-  // int32 method = 4;
+  // .ENUM.EServerType from = 4;
+  if (this->from() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_from());
+  }
+
+  // .ENUM.EServerType to = 5;
+  if (this->to() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_to());
+  }
+
+  // uint64 accid = 6;
+  if (this->accid() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt64Size(
+        this->_internal_accid());
+  }
+
+  // int32 method = 7;
   if (this->method() != 0) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
         this->_internal_method());
   }
 
-  // .muduo.net.ErrorCode error = 7;
+  // .muduo.net.ErrorCode error = 10;
   if (this->error() != 0) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_error());
@@ -456,6 +523,15 @@ void RpcMessage::MergeFrom(const RpcMessage& from) {
   }
   if (from.service() != 0) {
     _internal_set_service(from._internal_service());
+  }
+  if (from.from() != 0) {
+    _internal_set_from(from._internal_from());
+  }
+  if (from.to() != 0) {
+    _internal_set_to(from._internal_to());
+  }
+  if (from.accid() != 0) {
+    _internal_set_accid(from._internal_accid());
   }
   if (from.method() != 0) {
     _internal_set_method(from._internal_method());

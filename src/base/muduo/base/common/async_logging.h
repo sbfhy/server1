@@ -45,6 +45,8 @@ public:
     m_thread.join();
   }
 
+  static void SetAsyncLog(const char* baseName, off_t rollSize);
+
 private:
   /*
    * 双缓冲思想。

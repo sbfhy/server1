@@ -1,6 +1,6 @@
 add_executable(logfile_test logfile_test.cpp)
-target_link_libraries(logfile_test muduo_base)
+target_link_libraries(logfile_test src_base)
 
 add_executable(asynclogging_test asynclogging_test.cpp)
-target_link_libraries(asynclogging_test muduo_base)
+target_link_libraries(asynclogging_test src_base)
 

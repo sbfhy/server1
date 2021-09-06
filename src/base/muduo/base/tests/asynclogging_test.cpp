@@ -10,16 +10,16 @@
 
 off_t kRollSize = 500*1000*1000;
 
-muduo::AsyncLogging* g_asyncLog = NULL;
+// muduo::AsyncLogging* g_asyncLog = NULL;
 
-void asyncOutput(const char* msg, int len)
-{
-  g_asyncLog->append(msg, len);
-}
+// void asyncOutput(const char* msg, int len)
+// {
+//   g_asyncLog->append(msg, len);
+// }
 
 void bench(bool longLog)
 {
-  muduo::Logger::setOutputFunc(asyncOutput);
+//   muduo::Logger::setOutputFunc(asyncOutput);
 
   int cnt = 0;
   const int kBatch = 1000;
@@ -59,9 +59,11 @@ int main(int argc, char* argv[])
   strncpy(name, argv[0], sizeof name - 1);
   std::cout << name << std::endl;
   muduo::LogFile::setLogFileDir(argv[0]);
-  muduo::AsyncLogging log(::basename(name), kRollSize);
-  log.start();
-  g_asyncLog = &log;
+//   muduo::AsyncLogging log(::basename(name), kRollSize);
+//   log.start();
+//   g_asyncLog = &log;
+
+  muduo::AsyncLogging::SetAsyncLog(::basename(name), kRollSize);
 
   bool longLog = argc > 1;
   bench(longLog);

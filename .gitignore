@@ -1,5 +1,6 @@
 build/debug/
 build/pb/
+bin/
 cscope*
 .ycm_extra_conf.py
 .clangd/
@@ -9,6 +10,6 @@ tags
 # dep/protobuf3.14.0_build/
 core.*
 .vscode/*
-myproto1/
-
+myproto/proto/
+*.pb.*
 

@@ -5,13 +5,13 @@
 using namespace RPC;
 
 
-C2G_UserLoginService::C2G_UserLoginService()
+C2G_UserService::C2G_UserService()
 {
 
 }
 
-void C2G_UserLoginService::C2G_UserLogin(const ::CMD::C2G_UserLoginArgPtr &request,
-                                         const ::CMD::C2G_UserLoginResPtr& response)
+void C2G_UserService::C2G_UserLogin(const ::CMD::C2G_UserLoginArgPtr &request,
+                                    const ::CMD::C2G_UserLoginResPtr& response)
 {
     if (request)
     {

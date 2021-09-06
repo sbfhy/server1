@@ -1,6 +1,11 @@
 #include "muduo/base/common/logging.h"
+
 #include "muduo/base/common/time_zone.h"
 #include "muduo/base/common/current_thread.h"
+#include "muduo/base/common/time_zone.h"
+#include "muduo/base/common/logfile.h"
+#include "muduo/base/common/async_logging.h"
+
 #include <cassert>
 #include <cerrno>
 #include <cstring>
@@ -208,4 +213,19 @@ void Logger::setTimeZone(const TimeZone& tz)
   g_logTimeZone = tz;
 }
 
+void Logger::SetLogging(const char* exePath, off_t rollSize)
+{
+    CHAR name[50] = { '\0' };
+    strncpy(name, exePath, sizeof name - 1);
 
+    muduo::TimeZone beijing(8*3600, "CST");
+    muduo::Logger::setTimeZone(beijing); 
+
+    const char* baseName = ::basename(name);
+    AsyncLogging::SetAsyncLog(baseName, rollSize);
+}
+
+void Logger::LogFlush()
+{
+    g_flushFunc();
+}
