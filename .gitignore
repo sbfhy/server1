@@ -1,5 +1,4 @@
 build/debug/
-build/pb/
 bin/
 cscope*
 .ycm_extra_conf.py
