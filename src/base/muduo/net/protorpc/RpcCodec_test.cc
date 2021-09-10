@@ -8,6 +8,7 @@
 
 using namespace muduo;
 using namespace muduo::net;
+using namespace CMD;
 
 void rpcMessageCallback(const TcpConnectionPtr&,
                         const RpcMessagePtr&,

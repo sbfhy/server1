@@ -7,12 +7,11 @@ int main(int argc, char* argv[])
 {
     Logger::SetLogging(argv[0], 200*1000);
 
-    std::shared_ptr<GateServer> server = 
-        std::make_shared<GateServer>( 
-            ServerArgs{9981}
-        );
-    server->Start();
-    server->Run();
+    thisServer = std::make_shared<GateServer>(
+        ServerArgs{ 9981 }
+    );
+    thisServer->Start();
+    thisServer->Run();
 
     return 0;
 }

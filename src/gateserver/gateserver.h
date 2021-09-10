@@ -2,12 +2,28 @@
 
 #include "src/base/server/server.h"
 
+#include "muduo/net/common/rpc_client.h"
+
+namespace CMD {
+    class RpcMessage;
+}   // namespace CMD
+
+
 class GateServer : public Server 
 {
 public:
-    GateServer(const ServerArgs& args) : Server(args) {}
+    GateServer(const ServerArgs& args);
+
+    virtual void Start() override;
+    virtual ENUM::EServerType GetServerType() const { return ENUM::ESERVERTYPE_GATESERVER; }
+
+    virtual void ForwardRpcMsg(const CMD::RpcMessage &message, RpcChannelPtr rpcChannelPtr);
 
 private:
     virtual void tick(QWORD usec) override;
     virtual void registerMgrs() override;
+
+private:
+    RpcClient m_Gate2Game;
 };
+

@@ -99,6 +99,10 @@ class Message;           // message.h
 } // namespace protobuf
 } // namespace google
 
+namespace CMD {
+    class RpcMessage;
+}
+
 namespace muduo
 {
 namespace net
@@ -127,9 +131,10 @@ public:
 
     virtual ~RpcChannel();
 
-    void setConnection(const TcpConnectionPtr &conn) { conn_ = conn; }
+    void setConnection(const TcpConnectionPtr &conn) { m_conn = conn; }
 
     void Send(const ::google::protobuf::MessagePtr& request);
+    void Send(const CMD::RpcMessage& rpcMsg);
 
     // typedef ::std::function<void(const ::google::protobuf::MessagePtr &)> ClientDoneCallback;
 
@@ -141,20 +146,24 @@ public:
 
 protected:
     void onRpcMessage(const TcpConnectionPtr &conn,
-                      const RpcMessagePtr &messagePtr,
+                      const CMD::RpcMessagePtr &messagePtr,
                       TimeStamp receiveTime);
-    void serviceHandleRequestMsg(const RpcMessage &message);    // Service处理request消息
-    void stubHandleResponseMsg(const RpcMessage &message);      // Stub处理response消息
+    void serviceHandleRequestMsg(const CMD::RpcMessage &message);    // Service处理request消息
+    void stubHandleResponseMsg(const CMD::RpcMessage &message);      // Stub处理response消息
 
 private:
     void onRpcMessageInMainLoop(const TcpConnectionPtr &conn,
-                                const RpcMessagePtr &messagePtr,
+                                const CMD::RpcMessagePtr &messagePtr,
                                 TimeStamp receiveTime);
 
     void doneCallbackInIoLoop(::google::protobuf::MessagePtr response,
-                              int64_t id);
+                              int64_t id,
+                              uint64_t accid,
+                              ENUM::EServerType from);
     void doneCallback(::google::protobuf::MessagePtr response,
-                      int64_t id);
+                      int64_t id,
+                      uint64_t accid,
+                      ENUM::EServerType from);
 
     void requestTimeOut(int64_t id);
 
@@ -167,15 +176,15 @@ protected:
         TimerId timerId;
     };
 
-    RpcCodec codec_;
-    TcpConnectionPtr conn_;
-    AtomicInt64 id_; // 自增Id，回调函数需要
+    RpcCodec m_codec;
+    TcpConnectionPtr m_conn;
+    AtomicInt64 m_id; // 自增Id，回调函数需要
 
-    MutexLock mutex_;
-    std::map<int64_t, OutstandingCall> outstandings_;
+    MutexLock m_mutex;
+    std::map<int64_t, OutstandingCall> m_outstandings;
 };
-typedef std::shared_ptr<RpcChannel> RpcChannelPtr; // FIXME: unique_ptr
 
 }
 }
 
+typedef std::shared_ptr<muduo::net::RpcChannel> RpcChannelPtr; // FIXME: unique_ptr

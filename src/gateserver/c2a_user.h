@@ -4,7 +4,7 @@
 #include "src/base/mgr/create_dynamic.h"
 
 namespace RPC {
-    
+
 class C2A_UserService : public CreateDynamicEmpty<C2A_UserService>
                       , public CMD::C2A_UserService
 {

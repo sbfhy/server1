@@ -5,6 +5,7 @@
 #include "muduo/net/common/buffer.h"
 #include "muduo/net/common/tcp_connection.h"
 #include "src/base/mgr/mgr_message.h"
+#include "src/base/server/server.h"
 
 #include "message/common/rpc.pb.h"
 #include "service/service_include.pb.h"
@@ -12,6 +13,7 @@
 
 using namespace muduo;
 using namespace muduo::net;
+using namespace CMD;
 
 static int test_down_pointer_cast()
 {
@@ -28,14 +30,14 @@ static int test_down_pointer_cast()
 static int dummy __attribute__((unused)) = test_down_pointer_cast();
 
 RpcChannel::RpcChannel()
-    : codec_(std::bind(&RpcChannel::onRpcMessageInMainLoop, this, _1, _2, _3))
+    : m_codec(std::bind(&RpcChannel::onRpcMessageInMainLoop, this, _1, _2, _3))
 {
     LOG_INFO << "RpcChannel::ctor - " << this;
 }
 
 RpcChannel::RpcChannel(const TcpConnectionPtr &conn)
-    : codec_(std::bind(&RpcChannel::onRpcMessageInMainLoop, this, _1, _2, _3))
-    , conn_(conn)
+    : m_codec(std::bind(&RpcChannel::onRpcMessageInMainLoop, this, _1, _2, _3))
+    , m_conn(conn)
 {
     LOG_INFO << "RpcChannel::ctor - " << this;
 }
@@ -48,13 +50,13 @@ RpcChannel::~RpcChannel()
 void RpcChannel::Send(const ::google::protobuf::MessagePtr& request)
 {
     // FIXME: can we move serialization to IO thread? 
-    if (!request || !conn_ || !conn_->GetLoop()) return ;
+    if (!request || !m_conn || !m_conn->GetLoop()) return ;
     const SServiceInfo *serviceInfo = MgrMessage::Instance().GetServiceInfo(request->GetDescriptor());
     if (!serviceInfo) return ;
 
     RpcMessage message;
     message.set_type(MSGTYPE_REQUEST);
-    int64_t id = id_.incrementAndGet();
+    int64_t id = m_id.incrementAndGet();
     message.set_id(id);
     message.set_service(static_cast<ENUM::EServiceType>(static_cast<int>(serviceInfo->serviceType) - 1));
     message.set_method(serviceInfo->methodIndex);
@@ -63,14 +65,19 @@ void RpcChannel::Send(const ::google::protobuf::MessagePtr& request)
     OutstandingCall out = { request, 
                             serviceInfo->serviceType, 
                             serviceInfo->methodIndex,
-                            conn_->GetLoop()->RunAfter(5.0, std::bind(&RpcChannel::requestTimeOut, shared_from_this(), id)) }; 
+                            m_conn->GetLoop()->RunAfter(5.0, std::bind(&RpcChannel::requestTimeOut, shared_from_this(), id)) }; 
     {
-    MutexLockGuard lock(mutex_);
-    outstandings_[id] = out;
+    MutexLockGuard lock(m_mutex);
+    m_outstandings[id] = out;
     }
 
     {LDBG("M_NET") << message.ShortDebugString();}
-    codec_.send(conn_, message);
+    m_codec.send(m_conn, message);
+}
+
+void RpcChannel::Send(const RpcMessage& rpcMsg)
+{
+    m_codec.send(m_conn, rpcMsg);
 }
 
 void RpcChannel::onDisconnect()
@@ -83,7 +90,7 @@ void RpcChannel::onMessage(const TcpConnectionPtr &conn,
                            TimeStamp receiveTime)
 {
     LOG_TRACE << "RpcChannel::onMessage " << buf->readableBytes();
-    codec_.onMessage(conn, buf, receiveTime);
+    m_codec.onMessage(conn, buf, receiveTime);
 }
 
 void RpcChannel::onRpcMessageInMainLoop(const TcpConnectionPtr &conn,
@@ -106,9 +113,15 @@ void RpcChannel::onRpcMessage(const TcpConnectionPtr &conn,
                               const RpcMessagePtr &messagePtr,
                               TimeStamp receiveTime)
 {
-    assert(conn == conn_);
+    assert(conn == m_conn);
     RpcMessage &message = *messagePtr;
     //   LDBG("M_NET") << message.DebugString();
+    if (message.to() != thisServer->GetServerType())
+    {
+        thisServer->ForwardRpcMsg(message, shared_from_this());
+        return ;
+    }
+
     if (message.type() == MSGTYPE_RESPONSE)
     {
         stubHandleResponseMsg(message);
@@ -134,7 +147,7 @@ void RpcChannel::serviceHandleRequestMsg(const RpcMessage &message) // Service�
             response.set_type(MSGTYPE_RESPONSE);
             response.set_id(message.id());
             response.set_error(errorCode);
-            codec_.send(conn_, response);
+            m_codec.send(m_conn, response);
         }
     };
 
@@ -171,11 +184,12 @@ void RpcChannel::serviceHandleRequestMsg(const RpcMessage &message) // Service�
     }
 
     // 调用处理函数
+    service->SetRpcChannel(shared_from_this()); // FIXME，RpcChannelPtr问题
     service->CallMethod(method, request, response);
 
     if (response)                               // FIXME: delay response
     {
-        doneCallbackInIoLoop(response, id);     // 发送回包
+        doneCallbackInIoLoop(response, id, message.accid(), message.from());     // 发送回包
     }
 
     funcErrorCode();
@@ -191,19 +205,19 @@ void RpcChannel::stubHandleResponseMsg(const RpcMessage &message)    // Stub处�
     bool found = false;
 
     {
-        MutexLockGuard lock(mutex_);
-        std::map<int64_t, OutstandingCall>::iterator it = outstandings_.find(id);
-        if (it != outstandings_.end())
+        MutexLockGuard lock(m_mutex);
+        std::map<int64_t, OutstandingCall>::iterator it = m_outstandings.find(id);
+        if (it != m_outstandings.end())
         {
             out = it->second;
-            outstandings_.erase(it);
+            m_outstandings.erase(it);
             found = true;
         }
         else
         {
 #ifndef NDEBUG
-            LOG_WARN << "Size " << outstandings_.size();
-            for (it = outstandings_.begin(); it != outstandings_.end(); ++it)
+            LOG_WARN << "Size " << m_outstandings.size();
+            for (it = m_outstandings.begin(); it != m_outstandings.end(); ++it)
             {
                 LOG_WARN << "id " << it->first;
             }
@@ -216,9 +230,9 @@ void RpcChannel::stubHandleResponseMsg(const RpcMessage &message)    // Stub处�
         LOG_WARN << "[处理response-没找到对应id] " << message.ShortDebugString();
         return ;
     }
-    if (conn_ && conn_->GetLoop())
+    if (m_conn && m_conn->GetLoop())
     {
-        conn_->GetLoop()->Cancel(out.timerId);  // 删除超时回调的定时器
+        m_conn->GetLoop()->Cancel(out.timerId);  // 删除超时回调的定时器
     }
 
     const ServicePtr pService = MgrMessage::Instance().GetServicePtr(out.serviceType);
@@ -238,47 +252,54 @@ void RpcChannel::stubHandleResponseMsg(const RpcMessage &message)    // Stub处�
 }
 
 void RpcChannel::doneCallbackInIoLoop(::google::protobuf::MessagePtr response,
-                                      int64_t id)
+                                      int64_t id,
+                                      uint64_t accid,
+                                      ENUM::EServerType from)
 {
-    if (!response || !conn_) return;
-    EventLoop *pIoLoop = conn_->GetLoop();
+    if (!response || !m_conn) return;
+    EventLoop *pIoLoop = m_conn->GetLoop();
     if (pIoLoop)
     {
         pIoLoop->RunInLoop(
-            std::bind(&RpcChannel::doneCallback, this, response, id));
+            std::bind(&RpcChannel::doneCallback, this, response, id, accid, from));
     }
     else
     {
-        doneCallback(response, id);
+        doneCallback(response, id, accid, from);
     }
 }
 
 void RpcChannel::doneCallback(::google::protobuf::MessagePtr response,
-                              int64_t id)
+                              int64_t id,
+                              uint64_t accid,
+                              ENUM::EServerType from)
 {
     if (!response) return;
     // FIXME: can we move serialization to IO thread?
     RpcMessage message;
     message.set_type(MSGTYPE_RESPONSE);
     message.set_id(id);
+    message.set_accid(accid);
+    message.set_from(thisServer->GetServerType());
+    message.set_to(from);
     message.set_response(response->SerializeAsString()); // FIXME: error check
-    codec_.send(conn_, message);
+    m_codec.send(m_conn, message);
     LDBG("M_NET") << response->ShortDebugString();
 }
 
 void RpcChannel::requestTimeOut(int64_t id)
 {
     {
-    MutexLockGuard lock(mutex_);
+    MutexLockGuard lock(m_mutex);
 
-    auto it = outstandings_.find(id);
-    if (it == outstandings_.end() || !it->second.request) 
+    auto it = m_outstandings.find(id);
+    if (it == m_outstandings.end() || !it->second.request) 
         return ;
     const ServicePtr servicePtr = MgrMessage::Instance().GetServicePtr(it->second.serviceType);
     const auto methodDesc = MgrMessage::Instance().GetMethodDescriptor(it->second.serviceType, it->second.methodIndex);
     if (!servicePtr || !methodDesc) return ;
     servicePtr->TimeOut(methodDesc, it->second.request);
 
-    outstandings_.erase(it);
+    m_outstandings.erase(it);
     }
 }

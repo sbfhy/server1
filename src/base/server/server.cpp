@@ -10,6 +10,8 @@
 #include "src/base/mgr/mgr_message.h"
 #include "src/base/mgr/mgr_base.h"
 
+std::shared_ptr<Server> thisServer;
+
 // namespace {
 
 /* extern const SDWORD kPollTimeMs; */
@@ -136,8 +138,10 @@ void Server::addMgr(MgrBase* mgr)
 void sig_handler(int sig_no)
 {
     LOG_DEBUG << "signal : " << sig_no;
-    Logger::LogFlush();
-    exit(1);
+    if (thisServer)
+    {
+        thisServer->Quit();
+    }
 }
 
 void Server::registerSignal()

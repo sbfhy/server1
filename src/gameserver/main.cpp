@@ -8,12 +8,11 @@ int main(int argc, char* argv[])
 {
     Logger::SetLogging(argv[0], 200*1000);
 
-    std::shared_ptr<GameServer> server = 
-        std::make_shared<GameServer>(
-            ServerArgs{9982}
-        );
-    server->Start();
-    server->Run();
+    thisServer = std::make_shared<GameServer>(
+        ServerArgs{ 9982 }
+    );
+    thisServer->Start();
+    thisServer->Run();
 
     return 0;
 }

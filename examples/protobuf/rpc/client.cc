@@ -17,10 +17,10 @@ class RpcClient : noncopyable
 {
  public:
   RpcClient(EventLoop* loop, const InetAddress& serverAddr)
-    : loop_(loop),
-      client_(loop, serverAddr, "RpcClient"),
-      channel_(new RpcChannel),
-      stub_(get_pointer(channel_))
+    : loop_(loop)
+    , client_(loop, serverAddr, "RpcClient")
+    , channel_(new RpcChannel)
+    //   stub_(get_pointer(channel_))
   {
     client_.setConnectionCallback(
         std::bind(&RpcClient::onConnection, this, _1));

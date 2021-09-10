@@ -22,8 +22,6 @@ class Buffer;
 class TcpConnection;
 typedef std::shared_ptr<TcpConnection> TcpConnectionPtr;
 
-class RpcMessage;
-typedef std::shared_ptr<RpcMessage> RpcMessagePtr;
 extern const char rpctag[5];// = "RPC0";
 
 // wire format
@@ -36,8 +34,17 @@ extern const char rpctag[5];// = "RPC0";
 // checksum  4-byte  adler32 of "RPC0"+payload
 //
 
-typedef ProtobufCodecLiteT<RpcMessage, rpctag> RpcCodec;
 
 }  // namespace net
 }  // namespace muduo
 
+
+namespace CMD {
+
+class RpcMessage;
+typedef std::shared_ptr<RpcMessage> RpcMessagePtr;
+
+}   // namespace CMD
+
+
+typedef muduo::net::ProtobufCodecLiteT<CMD::RpcMessage, muduo::net::rpctag> RpcCodec;
