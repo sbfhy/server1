@@ -3,7 +3,7 @@
 #include "muduo/base/common/logging.h"
 #include "muduo/base/common/file_util.h"
 #include "muduo/base/common/process_info.h"
-#include "muduo/base/define/define_new.h"
+#include "define/define_new.h"
 #include <assert.h>
 #include <cstdio>
 #include <cstring>

@@ -1,7 +1,7 @@
 #include "muduo/net/common/tcp_connection.h"
 #include "muduo/base/common/logging.h"
 #include "muduo/base/common/weak_callback.h"
-#include "muduo/base/define/define_new.h"
+#include "define/define_new.h"
 #include "muduo/net/common/channel.h"
 #include "muduo/net/common/eventloop.h"
 #include "muduo/net/common/socket.h"

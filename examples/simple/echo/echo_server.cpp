@@ -1,9 +1,8 @@
 #include "echo_server.h"
 #include "muduo/base/common/logging.h"
 
-using std::placeholders::_1;
-using std::placeholders::_2;
-using std::placeholders::_3;
+using namespace std::placeholders;
+
 
 EchoServer::EchoServer(muduo::net::EventLoop* loop,
                        const muduo::net::InetAddress& listenAddr)

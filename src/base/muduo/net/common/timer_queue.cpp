@@ -1,6 +1,6 @@
 #include "muduo/net/common/timer_queue.h"
 #include "muduo/base/common/logging.h"
-#include "muduo/base/define/define_new.h"
+#include "define/define_new.h"
 #include "muduo/net/common/eventloop.h"
 #include "muduo/net/common/timer.h"
 #include "muduo/net/common/timerid.h"

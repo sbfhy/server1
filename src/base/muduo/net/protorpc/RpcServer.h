@@ -10,15 +10,16 @@
 
 #pragma once
 
-#include "muduo/base/define/define_service.h"
+#include "define/define_service.h"
 #include "muduo/net/common/tcp_server.h"
+#include "src/base/common/xentry.h"
 
 namespace muduo
 {
 namespace net
 {
 
-class RpcServer
+class RpcServer : public xEntry
 {
  public:
   RpcServer(EventLoop* loop,

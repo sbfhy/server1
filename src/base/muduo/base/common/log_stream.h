@@ -1,8 +1,8 @@
 #pragma once
 
-#include "muduo/base/define/define_variable.h"
+#include "define/define_variable.h"
 #include "noncopyable.h"
-#include "muduo/base/define/define_types.h"
+#include "define/define_types.h"
 #include "muduo/base/common/string_piece.h"
 
 #include <string>

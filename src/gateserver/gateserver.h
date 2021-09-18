@@ -19,6 +19,8 @@ public:
 
     virtual void ForwardRpcMsg(const CMD::RpcMessage &message, RpcChannelPtr rpcChannelPtr);
 
+    void OnUserConnDown();
+
 private:
     virtual void tick(QWORD usec) override;
     virtual void registerMgrs() override;

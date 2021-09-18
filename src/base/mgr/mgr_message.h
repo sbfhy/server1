@@ -1,6 +1,6 @@
 #pragma once
 
-#include "muduo/base/define/define_service.h"
+#include "define/define_service.h"
 #include "src/base/common/singleton.h"
 
 namespace google {
@@ -17,7 +17,6 @@ class MgrMessage : public Singleton<MgrMessage>
 {
 public:
     virtual void Wake() override;
-    virtual void Init() override;
 
     const ServicePtr GetServicePtr(ENUM::EServiceType) const;
     const SServiceInfo *GetServiceInfo(const ::google::protobuf::Descriptor *requestDesc) const;
@@ -28,6 +27,7 @@ public:
 
 private:
     void registerService();
+    void getServiceFromTo(const std::string& serviceTypeName, ENUM::EServerType &from, ENUM::EServerType &to);
 
 private:
     TArrayService m_arrayService;

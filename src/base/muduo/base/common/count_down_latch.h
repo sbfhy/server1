@@ -3,7 +3,7 @@
 #include "noncopyable.h"
 #include "muduo/base/common/condition.h"
 #include "muduo/base/common/mutex.h"
-#include "muduo/base/define/define_variable.h"
+#include "define/define_variable.h"
 
 namespace muduo
 {

@@ -1,7 +1,7 @@
 #include "muduo/net/common/poller.h"
 #include "muduo/net/poller/poll_poller.h"
 #include "muduo/net/poller/epoll_poller.h"
-#include "muduo/base/define/define_new.h"
+#include "define/define_new.h"
 #include <stdlib.h>
 
 using namespace muduo::net;

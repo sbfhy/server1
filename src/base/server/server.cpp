@@ -7,8 +7,10 @@
 #include "muduo/net/common/poller.h"
 #include "muduo/net/common/eventloop.h"
 #include "muduo/net/common/channel.h"
-#include "src/base/mgr/mgr_message.h"
 #include "src/base/mgr/mgr_base.h"
+#include "src/base/mgr/mgr_message.h"
+#include "src/base/mgr/mgr_dynamicfactory.h"
+#include "src/base/mgr/mgr_event_global.h"
 
 std::shared_ptr<Server> thisServer;
 
@@ -135,6 +137,13 @@ void Server::addMgr(MgrBase* mgr)
     m_mgrs.push_back(mgr);
 }
 
+void Server::registerMgrs()
+{
+    addMgr(MgrEventGlobal::PInstance());
+    addMgr(MgrDynamicFactory::PInstance());
+    addMgr(MgrMessage::PInstance());
+}
+
 void sig_handler(int sig_no)
 {
     LOG_DEBUG << "signal : " << sig_no;
@@ -160,5 +169,4 @@ void Server::registerSignal()
         perror("sigaction");
         exit(1);
     }
-
 }

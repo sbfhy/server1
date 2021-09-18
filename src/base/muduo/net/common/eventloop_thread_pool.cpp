@@ -1,8 +1,8 @@
 #include "muduo/net/common/eventloop_thread_pool.h"
 #include "muduo/net/common/eventloop.h"
 #include "muduo/net/common/eventloop_thread.h"
-#include "muduo/base/define/define_types.h"
-#include "muduo/base/define/define_new.h"
+#include "define/define_types.h"
+#include "define/define_new.h"
 #include <stdio.h>
 
 using namespace muduo;

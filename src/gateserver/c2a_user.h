@@ -11,8 +11,8 @@ class C2A_UserService : public CreateDynamicEmpty<C2A_UserService>
 public:
     C2A_UserService();
 
-    virtual void C2A_UserLogin(const ::CMD::C2A_UserLoginArgPtr& request,
-                               const ::CMD::C2A_UserLoginResPtr& response) override;
+    virtual void C2A_UserSignIn(const ::CMD::C2A_UserSignInArgPtr& request,
+                                const ::CMD::C2A_UserSignInResPtr& response) override;
 
 };
 

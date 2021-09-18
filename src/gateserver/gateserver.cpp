@@ -1,7 +1,5 @@
 #include "src/gateserver/gateserver.h"
 
-#include "src/base/mgr/mgr_message.h"
-#include "src/base/mgr/mgr_dynamicfactory.h"
 #include "src/gateserver/mgr_user.h"
 #include "message/common/rpc.pb.h"
 
@@ -24,8 +22,8 @@ void GateServer::tick(QWORD usec)
 
 void GateServer::registerMgrs()
 {
-    addMgr(MgrDynamicFactory::PInstance());
-    addMgr(MgrMessage::PInstance());
+    Server::registerMgrs();
+    addMgr(MgrUser::PInstance());
 }
 
 void GateServer::ForwardRpcMsg(const CMD::RpcMessage &message, RpcChannelPtr rpcChannelPtr)

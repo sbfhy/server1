@@ -9,6 +9,9 @@
 #include <assert.h>
 #endif
 
+#define BZERO(a, b)             memset(a, 0, b)
+#define BCOPY(a, b, n)          memcpy(b, a, n)
+
 namespace muduo
 {
 

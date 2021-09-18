@@ -9,7 +9,7 @@
 #include "muduo/base/common/mutex.h"
 #include "muduo/net/protorpc/RpcCodec.h"
 #include "muduo/net/common/timerid.h"
-#include "muduo/base/define/define_service.h"
+#include "define/define_service.h"
 #include "down_pointer_cast.h"
 #include "service.h"
 
@@ -144,6 +144,9 @@ public:
                    Buffer *buf,
                    TimeStamp receiveTime);
 
+    void SetAccid(QWORD accid) { m_accid = accid; }
+    QWORD GetAccid() const { return m_accid; }
+
 protected:
     void onRpcMessage(const TcpConnectionPtr &conn,
                       const CMD::RpcMessagePtr &messagePtr,
@@ -178,10 +181,12 @@ protected:
 
     RpcCodec m_codec;
     TcpConnectionPtr m_conn;
-    AtomicInt64 m_id; // 自增Id，回调函数需要
+    AtomicInt64 m_id;                   // 自增Id，回调函数需要
 
     MutexLock m_mutex;
     std::map<int64_t, OutstandingCall> m_outstandings;
+
+    QWORD m_accid {0};                  // GateServer用
 };
 
 }

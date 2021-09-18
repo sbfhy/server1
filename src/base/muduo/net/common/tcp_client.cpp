@@ -1,6 +1,6 @@
 #include "muduo/net/common/tcp_client.h"
 #include "muduo/base/common/logging.h"
-#include "muduo/base/define/define_new.h"
+#include "define/define_new.h"
 #include "muduo/net/common/connector.h"
 #include "muduo/net/common/eventloop.h"
 #include "muduo/net/common/sockets_ops.h"

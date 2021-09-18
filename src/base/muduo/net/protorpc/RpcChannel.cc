@@ -60,6 +60,9 @@ void RpcChannel::Send(const ::google::protobuf::MessagePtr& request)
     message.set_id(id);
     message.set_service(static_cast<ENUM::EServiceType>(static_cast<int>(serviceInfo->serviceType) - 1));
     message.set_method(serviceInfo->methodIndex);
+    message.set_from(ENUM::ESERVERTYPE_CLIENT);
+    message.set_to(serviceInfo->to);
+    message.set_accid(0);           // FIXME
     message.set_request(request->SerializeAsString());  // FIXME: error check
 
     OutstandingCall out = { request, 

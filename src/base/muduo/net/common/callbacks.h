@@ -1,16 +1,14 @@
 #pragma once
 
 #include "muduo/base/common/time_stamp.h"
-#include "muduo/base/define/define_types.h"
+#include "define/define_types.h"
 #include <functional>
 #include <memory>
 
 namespace muduo
 {
 
-using std::placeholders::_1;
-using std::placeholders::_2;
-using std::placeholders::_3;
+using namespace std::placeholders;
 
 template<typename T>
 inline T* get_pointer(const std::shared_ptr<T>& ptr)

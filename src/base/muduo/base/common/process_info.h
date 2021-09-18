@@ -1,7 +1,7 @@
 #pragma once
 
 #include "muduo/base/common/string_piece.h"
-#include "muduo/base/define/define_variable.h"
+#include "define/define_variable.h"
 #include "muduo/base/common/time_stamp.h"
 #include <vector>
 #include <sys/types.h>

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "noncopyable.h"
-#include "muduo/base/define/define_new.h"
+#include "define/define_new.h"
 #include "src/base/mgr/mgr_base.h"
 
 template <typename T>

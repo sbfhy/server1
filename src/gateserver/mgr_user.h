@@ -1,18 +1,24 @@
 #pragma once 
 
 #include "common/singleton.h"
-#include "muduo/base/define/define_variable.h"
+#include "define/define_variable.h"
 
 #include "user.h"
 
 #include <map>
 #include <memory>
 
+class xEntry;
+class IVarList;
+
 class MgrUser : public Singleton<MgrUser>
 {
 public:
-    bool UserLogin(QWORD accid, RpcChannelPtr rpcChannelPtr);
+    virtual bool Init() override;
+
+    bool UserSignIn(QWORD accid, RpcChannelPtr rpcChannelPtr);
     bool CheckUserRpcChannel(QWORD accid, RpcChannelPtr rpcChannelPtr);
+    void UserSignOut(xEntry* sender, const IVarList& varList);
 
 private:
     std::map<QWORD, std::shared_ptr<class User>> m_mapUser; // <accid, User>

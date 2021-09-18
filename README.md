@@ -5,8 +5,9 @@
 <br />
 
 # 介绍
-个人rpcserver尝试整理test1
-
+个人rpcserver尝试整理test1  
+[客户端](https://git.xindong.com/huangyong/client1.git)   
+[proto](https://git.xindong.com/huangyong/myproto1.git)，要放到myproto目录，并改名myproto/proto/   
 
 <br />
 

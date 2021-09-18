@@ -13,10 +13,6 @@ void MgrMessage::Wake()
     registerService();
 }
 
-void MgrMessage::Init()
-{
-}
-
 void MgrMessage::registerService()
 {
     m_arrayService.fill(nullptr);
@@ -37,13 +33,18 @@ void MgrMessage::registerService()
 
         m_arrayService.at(serviceType) = ptrService;
 
+        ENUM::EServerType from{ ENUM::ESERVERTYPE_MIN }, to{ ENUM::ESERVERTYPE_MIN };
+        getServiceFromTo(ENUM::EServiceType_Name(serviceType), from, to);
+
         for (int i = 0; i < serviceDesc->method_count(); ++ i)
         {
             const auto* requestDesc = ptrService->GetRequestPrototype(serviceDesc->method(i)).GetDescriptor();
             if (!requestDesc) continue;
             m_mapRequest2ServiceInfo[requestDesc] = SServiceInfo {
                                                         static_cast<ENUM::EServiceType>(serviceType), 
-                                                        i
+                                                        i,
+                                                        from,
+                                                        to
                                                     };
             {LDBG("M_NET") << "[service-注册method]" << serviceTypeName << ", " << serviceDesc->method(i)->name();}
         }
@@ -77,4 +78,24 @@ const ::google::protobuf::MethodDescriptor* MgrMessage::GetMethodDescriptor(ENUM
     const auto serviceDesc = GetServiceDescriptor(serviceType);
     if (!serviceDesc) return nullptr;
     return serviceDesc->method(methodIdx);
+}
+
+void MgrMessage::getServiceFromTo(const std::string& serviceTypeName, ENUM::EServerType &from, ENUM::EServerType &to)
+{
+    static const std::map<char, ENUM::EServerType> s_mapChar2ServiceType = {
+        {'C', ENUM::ESERVERTYPE_CLIENT},
+        {'A', ENUM::ESERVERTYPE_GATESERVER},
+        {'G', ENUM::ESERVERTYPE_GAMESERVER},
+    };
+
+    auto func = [](char c, ENUM::EServerType &type)
+    {
+        auto itFind = s_mapChar2ServiceType.find(c);
+        if (itFind == s_mapChar2ServiceType.end()) return;
+        type = itFind->second;
+    };
+
+    if (serviceTypeName.size() < 3) return;
+    func(serviceTypeName[0], from);
+    func(serviceTypeName[2], to);
 }

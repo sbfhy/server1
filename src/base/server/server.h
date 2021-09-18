@@ -38,10 +38,10 @@ public:
 
 protected:
     void addMgr(MgrBase* mgr);
+    virtual void registerMgrs();
 
 private:
     virtual void tick(QWORD usec);
-    virtual void registerMgrs() {}
 
     void registerSignal();
     void wake();

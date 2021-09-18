@@ -1,8 +1,8 @@
 #include "muduo/base/common/time_zone.h"
 #include "noncopyable.h"
 #include "muduo/base/common/date.h"
-#include "muduo/base/define/define_new.h"
-#include "muduo/base/define/define_types.h"
+#include "define/define_new.h"
+#include "define/define_types.h"
 #include <stdexcept>
 #include <algorithm>
 #include <cassert>

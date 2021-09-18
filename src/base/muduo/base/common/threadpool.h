@@ -3,13 +3,12 @@
 //
 // Author: Shuo Chen (chenshuo at chenshuo dot com)
 
-#ifndef MUDUO_BASE_THREADPOOL_H
-#define MUDUO_BASE_THREADPOOL_H
+#pragma once
 
-#include <muduo/base/common/condition.h>
-#include <muduo/base/common/mutex.h>
-#include <muduo/base/common/thread.h>
-#include <muduo/base/define/define_types.h>
+#include "muduo/base/common/condition.h"
+#include "muduo/base/common/mutex.h"
+#include "muduo/base/common/thread.h"
+#include "define/define_types.h"
 
 #include <deque>
 #include <vector>
@@ -62,4 +61,3 @@ class ThreadPool : noncopyable
 
 }  // namespace muduo
 
-#endif  // MUDUO_BASE_THREADPOOL_H

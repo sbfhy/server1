@@ -8,7 +8,7 @@
 #include "muduo/base/common/logfile.h"
 #include "muduo/base/common/time_stamp.h"
 #include "muduo/base/common/logging.h"
-#include "muduo/base/define/define_new.h"
+#include "define/define_new.h"
 
 #include <stdio.h>
 
