@@ -58,7 +58,7 @@ void RpcChannel::Send(const ::google::protobuf::MessagePtr& request)
     message.set_type(MSGTYPE_REQUEST);
     int64_t id = m_id.incrementAndGet();
     message.set_id(id);
-    message.set_service(static_cast<ENUM::EServiceType>(static_cast<int>(serviceInfo->serviceType) - 1));
+    message.set_service(serviceInfo->serviceType);
     message.set_method(serviceInfo->methodIndex);
     message.set_from(ENUM::ESERVERTYPE_CLIENT);
     message.set_to(serviceInfo->to);

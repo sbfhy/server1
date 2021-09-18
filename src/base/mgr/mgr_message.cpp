@@ -20,34 +20,40 @@ void MgrMessage::registerService()
 
     for (int serviceType = ENUM::SERVICETYPE_MIN + 1; serviceType < ENUM::SERVICETYPE_MAX; ++ serviceType)
     {
-        std::string serviceTypeName = "RPC::" + ENUM::EServiceType_Name(serviceType);
-        ServicePtr ptrService = ServicePtr( static_cast<muduo::net::Service*>(
-                                            MgrDynamicFactory::Instance().Create(serviceTypeName)) );
-        // if (ENUM::EServiceType_IsValid(serviceType) && !ptrService)
-        // {
-        //     {LDBG("M_NET") << serviceTypeName << " 未注册";}
-        // }
-        if (!ptrService) continue;
-        const auto* serviceDesc = ptrService->GetDescriptor();
-        if (!serviceDesc) continue;
-
-        m_arrayService.at(serviceType) = ptrService;
-
-        ENUM::EServerType from{ ENUM::ESERVERTYPE_MIN }, to{ ENUM::ESERVERTYPE_MIN };
-        getServiceFromTo(ENUM::EServiceType_Name(serviceType), from, to);
-
-        for (int i = 0; i < serviceDesc->method_count(); ++ i)
+        auto funcParseService = [this, &serviceType](const std::string& serviceTypeName)
         {
-            const auto* requestDesc = ptrService->GetRequestPrototype(serviceDesc->method(i)).GetDescriptor();
-            if (!requestDesc) continue;
-            m_mapRequest2ServiceInfo[requestDesc] = SServiceInfo {
-                                                        static_cast<ENUM::EServiceType>(serviceType), 
-                                                        i,
-                                                        from,
-                                                        to
-                                                    };
-            {LDBG("M_NET") << "[service-注册method]" << serviceTypeName << ", " << serviceDesc->method(i)->name();}
-        }
+            ServicePtr ptrService = ServicePtr( static_cast<muduo::net::Service*>(
+                                                MgrDynamicFactory::Instance().Create(serviceTypeName)) );
+            // if (ENUM::EServiceType_IsValid(serviceType) && !ptrService)
+            // {
+            //     {LDBG("M_NET") << serviceTypeName << " 未注册";}
+            // }
+            if (!ptrService) return;
+            const auto* serviceDesc = ptrService->GetDescriptor();
+            if (!serviceDesc) return;
+
+            m_arrayService.at(serviceType) = ptrService;
+
+            ENUM::EServerType from{ ENUM::ESERVERTYPE_MIN }, to{ ENUM::ESERVERTYPE_MIN };
+            getServiceFromTo(ENUM::EServiceType_Name(serviceType), from, to);
+
+            for (int i = 0; i < serviceDesc->method_count(); ++ i)
+            {
+                const auto* requestDesc = ptrService->GetRequestPrototype(serviceDesc->method(i)).GetDescriptor();
+                if (!requestDesc) continue;
+                m_mapRequest2ServiceInfo[requestDesc] = SServiceInfo {
+                                                            static_cast<ENUM::EServiceType>(serviceType), 
+                                                            i,
+                                                            from,
+                                                            to
+                                                        };
+                {LDBG("M_NET") << "[service-注册method]" << serviceTypeName << ", " << serviceDesc->method(i)->name();}
+            }
+        };
+
+        const std::string& EServiceTypeName = ENUM::EServiceType_Name(serviceType);
+        funcParseService("RPC::" + EServiceTypeName);
+        funcParseService("RPC::" + EServiceTypeName + "_Stub");
     }
 }
 
