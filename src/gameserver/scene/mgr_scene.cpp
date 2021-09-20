@@ -11,3 +11,9 @@ MgrScene::~MgrScene()
 {
 
 }
+
+bool MgrScene::Init()
+{
+    m_pSceneCapital = std::make_unique<Scene>();
+    return true;
+}

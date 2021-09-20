@@ -19,13 +19,16 @@ public:
 
     virtual void ForwardRpcMsg(const CMD::RpcMessage &message, RpcChannelPtr rpcChannelPtr);
 
-    void OnUserConnDown();
+    void SendToGame(const ::google::protobuf::MessagePtr& request);
 
 private:
     virtual void tick(QWORD usec) override;
     virtual void registerMgrs() override;
+    
+    void onConnectionSucceedCb();
 
 private:
     RpcClient m_Gate2Game;
 };
 
+extern std::shared_ptr<GateServer> thisServer;

@@ -133,7 +133,7 @@ public:
 
     void setConnection(const TcpConnectionPtr &conn) { m_conn = conn; }
 
-    void Send(const ::google::protobuf::MessagePtr& request);
+    void Send(const ::google::protobuf::MessagePtr& request, QWORD accid = 0);
     void Send(const CMD::RpcMessage& rpcMsg);
 
     // typedef ::std::function<void(const ::google::protobuf::MessagePtr &)> ClientDoneCallback;

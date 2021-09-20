@@ -4,12 +4,6 @@
 
 using namespace RPC;
 
-
-C2G_UserService::C2G_UserService()
-{
-
-}
-
 void C2G_UserService::C2G_UserSignIn(const ::CMD::C2G_UserSignInArgPtr &request,
                                      const ::CMD::C2G_UserSignInResPtr& response)
 {

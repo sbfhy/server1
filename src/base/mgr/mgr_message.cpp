@@ -47,7 +47,7 @@ void MgrMessage::registerService()
                                                             from,
                                                             to
                                                         };
-                {LDBG("M_NET") << "[service-注册method]" << serviceTypeName << ", " << serviceDesc->method(i)->name();}
+                {LDBG("M_NET") << "[service-注册method]" << serviceTypeName << ", " << serviceDesc->method(i)->name() << ", " << from << ", " << to;}
             }
         };
 

@@ -11,6 +11,8 @@
 #include "service/service_include.pb.h"
 #include <google/protobuf/descriptor.h>
 
+extern std::shared_ptr<Server> thisServer;
+
 using namespace muduo;
 using namespace muduo::net;
 using namespace CMD;
@@ -47,7 +49,7 @@ RpcChannel::~RpcChannel()
     LOG_INFO << "RpcChannel::dtor - " << this;
 }
 
-void RpcChannel::Send(const ::google::protobuf::MessagePtr& request)
+void RpcChannel::Send(const ::google::protobuf::MessagePtr& request, QWORD accid/* = 0*/)
 {
     // FIXME: can we move serialization to IO thread? 
     if (!request || !m_conn || !m_conn->GetLoop()) return ;
@@ -60,9 +62,9 @@ void RpcChannel::Send(const ::google::protobuf::MessagePtr& request)
     message.set_id(id);
     message.set_service(serviceInfo->serviceType);
     message.set_method(serviceInfo->methodIndex);
-    message.set_from(ENUM::ESERVERTYPE_CLIENT);
+    message.set_from(serviceInfo->from);
     message.set_to(serviceInfo->to);
-    message.set_accid(0);           // FIXME
+    message.set_accid(accid);
     message.set_request(request->SerializeAsString());  // FIXME: error check
 
     OutstandingCall out = { request, 
@@ -80,6 +82,7 @@ void RpcChannel::Send(const ::google::protobuf::MessagePtr& request)
 
 void RpcChannel::Send(const RpcMessage& rpcMsg)
 {
+    {LDBG("M_NET") << rpcMsg.ShortDebugString();}
     m_codec.send(m_conn, rpcMsg);
 }
 
@@ -119,6 +122,8 @@ void RpcChannel::onRpcMessage(const TcpConnectionPtr &conn,
     assert(conn == m_conn);
     RpcMessage &message = *messagePtr;
     //   LDBG("M_NET") << message.DebugString();
+    if (message.from() == message.to())
+        return ;
     if (message.to() != thisServer->GetServerType())
     {
         thisServer->ForwardRpcMsg(message, shared_from_this());

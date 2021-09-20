@@ -9,7 +9,7 @@ class G2C_SceneService_Stub : public CreateDynamicEmpty<G2C_SceneService_Stub>
                             , public CMD::G2C_SceneService_Stub
 {
 public:
-    G2C_SceneService_Stub();
+    G2C_SceneService_Stub() {}
 
     virtual void G2C_EnterScene_DoneCb(const ::CMD::G2C_EnterSceneArgPtr &request,
                                        const ::CMD::G2C_EnterSceneResPtr &response) {}

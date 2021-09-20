@@ -34,6 +34,7 @@ void RpcClient::onConnection(const TcpConnectionPtr & conn)
     {
         LOG_DEBUG << "主动连接成功" << conn->getPeerAddress().toIpPort();
         m_RpcChannel->setConnection(conn);
+        m_connectionSucceedCb();
     }
 }
 
@@ -42,5 +43,13 @@ void RpcClient::Send(const CMD::RpcMessage& rpcMsg)
     if (m_RpcChannel)
     {
         m_RpcChannel->Send(rpcMsg);
+    }
+}
+
+void RpcClient::Send(const ::google::protobuf::MessagePtr& request)
+{
+    if (m_RpcChannel)
+    {
+        m_RpcChannel->Send(request);
     }
 }

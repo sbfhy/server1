@@ -55,4 +55,3 @@ private:
     ServerArgs m_args;
 };
 
-extern std::shared_ptr<Server> thisServer;

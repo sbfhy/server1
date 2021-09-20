@@ -16,6 +16,7 @@ namespace CMD {
     class RpcMessage;
 }
 
+
 class RpcClient : muduo::noncopyable
 {
 public:
@@ -24,6 +25,8 @@ public:
 
     void Connect();
     void Send(const CMD::RpcMessage& rpcMsg);
+    void Send(const ::google::protobuf::MessagePtr& request);
+    void SetConnectionSucceedCb(std::function<void ()> cb) { m_connectionSucceedCb = std::move(cb); }
 
 private:
     void onConnection(const TcpConnectionPtr& conn);
@@ -32,4 +35,5 @@ private:
     EventLoop* m_loop;
     TcpClient m_TcpClient;
     RpcChannelPtr m_RpcChannel;
+    std::function<void ()>  m_connectionSucceedCb;      // 连接成功后的回调
 };
