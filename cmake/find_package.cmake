@@ -4,9 +4,9 @@
 set(Protobuf_DIR ${PROJECT_SOURCE_DIR}/dep/protobuf3.14.0_build)
 set(Protobuf_Lib_DIR ${Protobuf_DIR}/lib)
 set(Protobuf_PREFIX_PATH
-	${Protobuf_DIR}/include
-	${Protobuf_DIR}/lib
-	${Protobuf_DIR}/bin
+    ${Protobuf_DIR}/include
+    ${Protobuf_DIR}/lib
+    ${Protobuf_DIR}/bin
 )
 list(APPEND CMAKE_PREFIX_PATH ${Protobuf_PREFIX_PATH})
 

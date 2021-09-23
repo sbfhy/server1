@@ -4,7 +4,6 @@ set(pbOutputDir ${CMAKE_SOURCE_DIR}/myproto/include)
 
 # 编译proto插件 =====================================
 set(protoPluginDir ${CMAKE_SOURCE_DIR}/myproto/proto/protoc_gen_rpc)
-message("protoPluginDir: ${protoPluginDir}")
 add_executable(protoc_gen_rpc ${protoPluginDir}/gen.cc ${protoPluginDir}/cpp_service.cc)
 target_link_libraries(protoc_gen_rpc ${Protobuf_PROTOC_LIBRARY} ${Protobuf_LIBRARY} pthread)
 # add_custom_command(                           # FIXME: fix this command
@@ -14,7 +13,7 @@ target_link_libraries(protoc_gen_rpc ${Protobuf_PROTOC_LIBRARY} ${Protobuf_LIBRA
 #     # DEPENDS ${protoPluginDir}/cpp_service.cc
 #     VERBATIM 
 # )
-install(TARGETS protoc_gen_rpc DESTINATION bin)
+# install(TARGETS protoc_gen_rpc DESTINATION bin)
 
 
 # 编译pb  ===========================================

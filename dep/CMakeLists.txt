@@ -1,0 +1,2 @@
+
+include(build_recastnavigation)

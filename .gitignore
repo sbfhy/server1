@@ -1,5 +1,5 @@
 build/debug/
-bin/
+build/release/
 cscope*
 .ycm_extra_conf.py
 .clangd/
