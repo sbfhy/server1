@@ -20,6 +20,7 @@ include(find_package)                                           # 查找依赖�
 include_directories(${PROJECT_SOURCE_DIR} 
                     ${PROJECT_SOURCE_DIR}/src/base 
                     ${CMAKE_INSTALL_PREFIX}/include
+                    # ${CMAKE_INSTALL_PREFIX}/include/recastnavigation     # FIXME
                     )
 
 # 添加库搜索目录 ===============================

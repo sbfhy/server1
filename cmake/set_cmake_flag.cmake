@@ -17,7 +17,8 @@ set(CXX_FLAGS_LIST
     -Werror
     # -Wconversion                                            # 当隐式类型转换可能改变值时给出警告  
     -Wno-unused-parameter                                     # 有未使用的参数，不警告
-    -Wold-style-cast                                          # 程序使用C风格的类型转换时给出警告
+    -Wno-unused-function                                      # 未使用的函数，不警告
+    # -Wold-style-cast                                          # 程序使用C风格的类型转换时给出警告
     -Woverloaded-virtual                                      # 重载虚函数名时给出警告  
     -Wpointer-arith                                           # 当在算术表达式中使用函数指针时给出警告  
     -Wshadow                                                  # 当一个局部变量掩盖了另一个局部变量时给出警告  
