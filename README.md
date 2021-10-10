@@ -29,6 +29,11 @@ CreateDynamic的派生类一定要显式声明构造函数，否则不会执行�
 <br />
 
 # 问题记录
+## 编译问题
+```
+libDetourTileCache.a(DetourTileCache.cpp.o)：在函数‘dtTileCache::buildNavMeshTile(unsigned int, dtNavMesh*)’中：DetourTileCache.cpp:(.text+0x15a5)：对‘dtCreateNavMeshData(dtNavMeshCreateParams*, unsigned char**, int*)’未定义的引用。
+    添加libnavmesh.a时，要先链接Detour，再链接DetourTileCache。
+```
 
 
 <br />

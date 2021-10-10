@@ -53,7 +53,6 @@ protected:
     //     DRAWMODE_CACHE_BOUNDS,
     //     MAX_DRAWMODE
     // };
-
     // DrawMode m_drawMode;
 
     int m_maxTiles;

@@ -30,11 +30,7 @@ public:
 
     static void Destroy()
     {
-        if (m_pInstance)
-        {
-            DELETE(m_pInstance);
-            m_pInstance = nullptr;
-        }
+        delete(m_pInstance);
     }
 
     static bool IsValid()
@@ -48,7 +44,7 @@ private:
     public:
         ~CGarbo()
         {
-            DELETE(m_pInstance);
+            delete(m_pInstance);
         }
     };
 

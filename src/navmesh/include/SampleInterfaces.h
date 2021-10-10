@@ -21,7 +21,7 @@
 
 // #include "DebugDraw.h"
 #include "Recast.h"
-#include "RecastDump.h"
+// #include "RecastDump.h"
 #include "PerfTimer.h"
 
 // These are example implementations of various interfaces used in Recast and Detour.
@@ -77,24 +77,24 @@ protected:
 // };
 
 /// stdio file implementation.
-class FileIO : public duFileIO
-{
-    FILE* m_fp;
-    int m_mode;
-public:
-    FileIO();
-    virtual ~FileIO();
-    bool openForWrite(const char* path);
-    bool openForRead(const char* path);
-    virtual bool isWriting() const;
-    virtual bool isReading() const;
-    virtual bool write(const void* ptr, const size_t size);
-    virtual bool read(void* ptr, const size_t size);
-private:
-    // Explicitly disabled copy constructor and copy assignment operator.
-    FileIO(const FileIO&);
-    FileIO& operator=(const FileIO&);
-};
+// class FileIO : public duFileIO
+// {
+//     FILE* m_fp;
+//     int m_mode;
+// public:
+//     FileIO();
+//     virtual ~FileIO();
+//     bool openForWrite(const char* path);
+//     bool openForRead(const char* path);
+//     virtual bool isWriting() const;
+//     virtual bool isReading() const;
+//     virtual bool write(const void* ptr, const size_t size);
+//     virtual bool read(void* ptr, const size_t size);
+// private:
+//     // Explicitly disabled copy constructor and copy assignment operator.
+//     FileIO(const FileIO&);
+//     FileIO& operator=(const FileIO&);
+// };
 
 #endif // SAMPLEINTERFACES_H
 

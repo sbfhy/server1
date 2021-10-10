@@ -33,10 +33,12 @@ if(Boost_FOUND)
   include_directories(${Boost_INCLUDE_DIRS})
 endif()
 if(PROTOBUF_FOUND)
-  message(STATUS "include protobuf directories : ${PROTOBUF_INCLUDE_DIR}")
+  #message(STATUS "include protobuf directories : ${PROTOBUF_INCLUDE_DIR}")
   include_directories(${PROTOBUF_INCLUDE_DIR})                # 包含protobuf头文件
 endif()
 
+#get_property(INCLUDE_DIRECTORIES DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
+#message(">>> include_dirs=${INCLUDE_DIRECTORIES}") #打印一下目录情况
 
 # 编译 ==========================================
 include(build_proto)                                          # 编译pb

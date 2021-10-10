@@ -95,7 +95,7 @@ TimerQueue::~TimerQueue()
   // do not remove channel, since we're in EventLoop::dtor(); 
   for (const Entry& timer : m_timers)
   {
-    DELETE_ONLY(timer.second);
+    delete(timer.second);
   }
 }
 
@@ -131,7 +131,7 @@ void TimerQueue::cancelInLoop(TimerId timerId)
   {
     size_t n = m_timers.erase(Entry(it->first->getExpiration(), it->first));
     assert(n == 1);  (void)n;
-    DELETE_ONLY(it->first);   // FIXME: no delete please
+    delete(it->first);   // FIXME: no delete please
     m_activeTimers.erase(it);
   }
   else if (m_callingExpiredTimers)
@@ -194,7 +194,7 @@ void TimerQueue::reset(const std::vector<Entry>& expired, TimeStamp now)
     else
     {
       // FIXME move to a free list
-      DELETE_ONLY(it.second);   // FIXME: no delete please
+      delete(it.second);   // FIXME: no delete please
     }
   }
 

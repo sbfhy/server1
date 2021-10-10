@@ -108,6 +108,9 @@ static int fixupCorridor(dtPolyRef* path, const int npath, const int maxPath,
 //  +-S-+-T-+
 //  |:::|   | <-- the step can end up in here, resulting U-turn path.
 //  +---+---+
+/*此函数检查路径是否有小 U 形转弯，即路径中更远的多边形与路径中的第一个多边形相邻。 如果发生这种情况，则采用快捷方式。
+  如果目标 (T) 位置位于图块边界，并且我们在 (S) 平行于图块边缘接近它，则可能会发生这种情况。
+  顶点的选择可以是任意的，步骤可以在这里结束，导致U形路径。*/
 static int fixupShortcuts(dtPolyRef* path, int npath, dtNavMeshQuery* navQuery)
 {
     if (npath < 3)
@@ -205,26 +208,27 @@ static bool getSteerTarget(dtNavMeshQuery* navQuery, const float* startPos, cons
     return true;
 }
 
-NavMeshTesterTool::NavMeshTesterTool() : m_sample(0),
-m_navMesh(0),
-m_navQuery(0),
-m_pathFindStatus(DT_FAILURE),
-m_toolMode(TOOLMODE_PATHFIND_FOLLOW),
-m_straightPathOptions(0),
-m_startRef(0),
-m_endRef(0),
-m_npolys(0),
-m_nstraightPath(0),
-m_nsmoothPath(0),
-m_nrandPoints(0),
-m_randPointsInCircle(false),
-m_hitResult(false),
-m_distanceToWall(0),
-m_sposSet(false),
-m_eposSet(false),
-m_pathIterNum(0),
-m_pathIterPolyCount(0),
-m_steerPointCount(0)
+NavMeshTesterTool::NavMeshTesterTool() : 
+    m_sample(0),
+    m_navMesh(0),
+    m_navQuery(0),
+    m_pathFindStatus(DT_FAILURE),
+    m_toolMode(TOOLMODE_PATHFIND_FOLLOW),
+    m_straightPathOptions(0),
+    m_startRef(0),
+    m_endRef(0),
+    m_npolys(0),
+    m_nstraightPath(0),
+    m_nsmoothPath(0),
+    // m_nrandPoints(0),
+    // m_randPointsInCircle(false),
+    m_hitResult(false),
+    m_distanceToWall(0),
+    m_sposSet(false),
+    m_eposSet(false),
+    m_pathIterNum(0),
+    m_pathIterPolyCount(0),
+    m_steerPointCount(0)
 {
     m_filter.setIncludeFlags(SAMPLE_POLYFLAGS_ALL ^ SAMPLE_POLYFLAGS_DISABLED);
     m_filter.setExcludeFlags(0);
@@ -234,7 +238,11 @@ m_steerPointCount(0)
     m_polyPickExt[2] = 2;
 
     m_neighbourhoodRadius = 2.5f;
-    m_randomRadius = 5.0f;
+    // m_randomRadius = 5.0f;
+}
+
+NavMeshTesterTool::~NavMeshTesterTool()
+{
 }
 
 void NavMeshTesterTool::init(Sample* sample)
@@ -256,7 +264,7 @@ void NavMeshTesterTool::init(Sample* sample)
     }
 
     m_neighbourhoodRadius = sample->getAgentRadius() * 20.0f;
-    m_randomRadius = sample->getAgentRadius() * 30.0f;
+    // m_randomRadius = sample->getAgentRadius() * 30.0f;
 }
 
 // void NavMeshTesterTool::handleMenu()
@@ -1026,8 +1034,8 @@ static void getPolyCenter(dtNavMesh* navMesh, dtPolyRef ref, float* center)
     center[2] *= s;
 }
 
-// void NavMeshTesterTool::handleRender()
-// {
+void NavMeshTesterTool::handleRender()
+{
 //     duDebugDraw& dd = m_sample->getDebugDraw();
 
 //     static const unsigned int startCol = duRGBA(128, 25, 0, 192);
@@ -1360,10 +1368,10 @@ static void getPolyCenter(dtNavMesh* navMesh, dtPolyRef ref, float* center)
 //             duDebugDrawCircle(&dd, m_spos[0], m_spos[1] + agentHeight / 2, m_spos[2], m_randomRadius, duRGBA(64, 16, 0, 220), 2.0f);
 //         }
 //     }
-// }
+}
 
-// void NavMeshTesterTool::handleRenderOverlay(double* proj, double* model, int* view)
-// {
+void NavMeshTesterTool::handleRenderOverlay(double* proj, double* model, int* view)
+{
 //     GLdouble x, y, z;
 
 //     // Draw start and end point labels
@@ -1381,7 +1389,7 @@ static void getPolyCenter(dtNavMesh* navMesh, dtPolyRef ref, float* center)
 //     // Tool help
 //     const int h = view[3];
 //     imguiDrawText(280, h - 40, IMGUI_ALIGN_LEFT, "LMB+SHIFT: Set start location  LMB: Set end location", imguiRGBA(255, 255, 255, 192));
-// }
+}
 
 // void NavMeshTesterTool::drawAgent(const float* pos, float r, float h, float c, const unsigned int col) // 绘制路径
 // {

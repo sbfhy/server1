@@ -102,7 +102,7 @@ class Sample
 {
 protected:
     class InputGeom* m_geom;                                // 导入的数据
-    class dtNavMesh* m_navMesh;                             // 最终输出的给Detour用的数据
+    class dtNavMesh* m_navMesh;                             // 最终输出给Detour用的数据
     class dtNavMeshQuery* m_navQuery;
     class dtCrowd* m_crowd;
 
