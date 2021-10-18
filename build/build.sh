@@ -20,7 +20,7 @@ export PATH=$projectDir/dep/cmake-3.19.2-Linux-x86_64/bin/:$PATH  # 使用项目
 
 CXX=${CXX:-g++}
 
-mkdir -p $buildTypeDir/bin/log
+mkdir -p $buildTypeDir/bin/log ${installDir}
 
 cd $buildTypeDir                                  \
   && cmake                                        \

@@ -1,6 +1,6 @@
 
 if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE "Debug")                               # 设置默认的CMAKE_BUILD_TYPE
+  set(CMAKE_BUILD_TYPE "debug")                               # 设置默认的CMAKE_BUILD_TYPE
 endif()
 
 # option(MUDUO_BUILD_EXAMPLES "Build Muduo examples" ON)      # 自定义一个选项开关
