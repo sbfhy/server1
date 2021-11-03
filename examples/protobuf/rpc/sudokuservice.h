@@ -12,7 +12,8 @@ public:
     SudokuService();
   
     virtual void Solve(const ::sudoku::SudokuRequestPtr& request,
-                       const ::sudoku::SudokuResponsePtr& response) override;
+                       const ::sudoku::SudokuResponsePtr& response,
+                       void* args) override;
 };
 
 }   // namespace RPC

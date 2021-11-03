@@ -76,7 +76,7 @@ void RpcChannel::Send(const ::google::protobuf::MessagePtr& request, QWORD accid
     m_outstandings[id] = out;
     }
 
-    {LDBG("M_NET") << message.ShortDebugString();}
+    {LDBG("M_NET") << message.ShortDebugString() << ", " << request->ShortDebugString();}
     m_codec.send(m_conn, message);
 }
 
@@ -182,7 +182,7 @@ void RpcChannel::serviceHandleRequestMsg(const RpcMessage &message) // Service�
     }
     // {LDBG("M_NET") << request->ShortDebugString();}
 
-    int64_t id = message.id(); (void)id;
+    QWORD id = message.id(); (void)id;
     ::google::protobuf::MessagePtr response;
 
     // 如果response类型是EmptyResponse，就不发回包
@@ -191,13 +191,15 @@ void RpcChannel::serviceHandleRequestMsg(const RpcMessage &message) // Service�
         response = ::google::protobuf::MessagePtr(service->GetResponsePrototype(method).New()); 
     }
 
-    // 调用处理函数
-    service->SetRpcChannel(shared_from_this()); // FIXME，RpcChannelPtr问题
-    service->CallMethod(method, request, response);
+    SRpcChannelMethodArgs args{.from = message.from(),
+                               .rpcChannelPtr = shared_from_this(),
+                               .msgId = id, 
+                               .accid = message.accid(),};
+    service->CallMethod(method, request, response, &args);      // 调用处理函数
 
-    if (response)                               // FIXME: delay response
+    if (response && !args.bDelay)
     {
-        doneCallbackInIoLoop(response, id, message.accid(), message.from());     // 发送回包
+        DoneCallbackInIoLoop(response, id, message.accid(), message.from()); // 不延迟，直接发回包
     }
 
     funcErrorCode();
@@ -259,7 +261,7 @@ void RpcChannel::stubHandleResponseMsg(const RpcMessage &message)    // Stub处�
     pService->DoneCallback(methodDesc, out.request, response);  // 调用Stub中的回调
 }
 
-void RpcChannel::doneCallbackInIoLoop(::google::protobuf::MessagePtr response,
+void RpcChannel::DoneCallbackInIoLoop(::google::protobuf::MessagePtr response,
                                       int64_t id,
                                       uint64_t accid,
                                       ENUM::EServerType from)
@@ -292,7 +294,7 @@ void RpcChannel::doneCallback(::google::protobuf::MessagePtr response,
     message.set_to(from);
     message.set_response(response->SerializeAsString()); // FIXME: error check
     m_codec.send(m_conn, message);
-    LDBG("M_NET") << response->ShortDebugString();
+    {LDBG("M_NET") << response->ShortDebugString();}
 }
 
 void RpcChannel::requestTimeOut(int64_t id)
@@ -311,3 +313,4 @@ void RpcChannel::requestTimeOut(int64_t id)
     m_outstandings.erase(it);
     }
 }
+

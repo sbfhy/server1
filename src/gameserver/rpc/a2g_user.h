@@ -12,13 +12,16 @@ public:
     A2G_UserService() {}
 
     virtual void A2G_GateNotifyGame(const ::CMD::A2G_GateNotifyGameArgPtr& request,
-                                    const ::CMD::EmptyResponsePtr& response) override;
+                                    const ::CMD::EmptyResponsePtr& response,
+                                    void* args) override;
 
     virtual void A2G_UserSignIn(const ::CMD::A2G_UserSignInArgPtr& request,
-                                const ::CMD::EmptyResponsePtr& response) override;
+                                const ::CMD::EmptyResponsePtr& response,
+                                void* args) override;
 
     virtual void A2G_UserSignOut(const ::CMD::A2G_UserSignOutArgPtr& request,
-                                 const ::CMD::EmptyResponsePtr& response) override;
+                                 const ::CMD::EmptyResponsePtr& response,
+                                 void* args) override;
 };
 
 }   // namespace RPC

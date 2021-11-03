@@ -8,7 +8,6 @@
 #include "muduo/base/common/atomic.h"
 #include "muduo/base/common/mutex.h"
 #include "muduo/net/protorpc/RpcCodec.h"
-#include "muduo/net/common/timerid.h"
 #include "define/define_service.h"
 #include "down_pointer_cast.h"
 #include "service.h"
@@ -146,6 +145,11 @@ public:
 
     void SetAccid(QWORD accid) { m_accid = accid; }
     QWORD GetAccid() const { return m_accid; }
+    
+    void DoneCallbackInIoLoop(::google::protobuf::MessagePtr response,
+                              int64_t id,
+                              uint64_t accid,
+                              ENUM::EServerType from);
 
 protected:
     void onRpcMessage(const TcpConnectionPtr &conn,
@@ -159,10 +163,6 @@ private:
                                 const CMD::RpcMessagePtr &messagePtr,
                                 TimeStamp receiveTime);
 
-    void doneCallbackInIoLoop(::google::protobuf::MessagePtr response,
-                              int64_t id,
-                              uint64_t accid,
-                              ENUM::EServerType from);
     void doneCallback(::google::protobuf::MessagePtr response,
                       int64_t id,
                       uint64_t accid,
@@ -171,14 +171,6 @@ private:
     void requestTimeOut(int64_t id);
 
 protected:
-    struct OutstandingCall
-    {
-        ::google::protobuf::MessagePtr request = nullptr;
-        ENUM::EServiceType serviceType = ENUM::SERVICETYPE_MIN;
-        int methodIndex = -1;
-        TimerId timerId;
-    };
-
     RpcCodec m_codec;
     TcpConnectionPtr m_conn;
     AtomicInt64 m_id;                   // 自增Id，回调函数需要
@@ -186,10 +178,13 @@ protected:
     MutexLock m_mutex;
     std::map<int64_t, OutstandingCall> m_outstandings;
 
+
+private:
     QWORD m_accid {0};                  // GateServer用
+
 };
 
-}
-}
+}   // namespace net
+}   // namespace muduo
 
 typedef std::shared_ptr<muduo::net::RpcChannel> RpcChannelPtr; // FIXME: unique_ptr

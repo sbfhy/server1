@@ -17,6 +17,7 @@ installDir=${buildTypeDir}/install                          # install命令的�
 # fi
 
 export PATH=$projectDir/dep/cmake-3.19.2-Linux-x86_64/bin/:$PATH  # 使用项目里自带的cmake
+export LD_LIBRARY_PATH=$projectDir/dep/protobuf3.14.0_build/lib/:$LD_LIBRARY_PATH   # find_package(Protobuf)查找问题
 
 CXX=${CXX:-g++}
 

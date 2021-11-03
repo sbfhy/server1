@@ -7,6 +7,7 @@
 
 #include "service/service_enum.pb.h"
 #include "define/define_variable.h"
+#include "muduo/net/common/timerid.h"
 
 namespace google {
 namespace protobuf {
@@ -24,6 +25,8 @@ namespace muduo {
 namespace net {
 
 class Service;
+class RpcChannel;
+typedef std::shared_ptr<RpcChannel> RpcChannelPtr;
 
 } // namespace net
 } // namespace muduo
@@ -42,13 +45,41 @@ struct SServiceInfo
 typedef std::map<const ::google::protobuf::Descriptor*, SServiceInfo> TMapDescriptor2ServiceInfo;
 
 
-typedef std::function<void( const ::google::protobuf::MethodDescriptor* method,
-                            const ::google::protobuf::MessagePtr& request,
-                            const ::google::protobuf::MessagePtr& response)> TFuncDelayResponse;
+// typedef std::function<void( const ::google::protobuf::MethodDescriptor* method,
+//                             const ::google::protobuf::MessagePtr& request,
+//                             const ::google::protobuf::MessagePtr& response)> TFuncDelayResponse;
 
-struct SDelayInfo
+// struct SDelayInfo
+// {
+//     ::google::protobuf::MessagePtr response;
+//     TFuncDelayResponse funcDelayResponse;
+// };
+// typedef std::map<QWORD, SDelayInfo> TMapQWORD2DelayInfo;
+
+
+struct OutstandingCall              // method callback
 {
-    ::google::protobuf::MessagePtr response;
-    TFuncDelayResponse funcDelayResponse;
+    ::google::protobuf::MessagePtr request = nullptr;
+    ENUM::EServiceType serviceType = ENUM::SERVICETYPE_MIN;
+    int methodIndex = -1;
+    muduo::net::TimerId timerId;
 };
-typedef std::map<QWORD, SDelayInfo> TMapQWORD2DelayInfo;
+
+struct SDelayResponse               // delay response
+{
+    ENUM::EServerType from = ENUM::ESERVERTYPE_MIN;
+    ::google::protobuf::MessagePtr response = nullptr;
+    muduo::net::RpcChannelPtr rpcChannelPtr{nullptr};
+    QWORD delayResponseId = 0;
+    QWORD msgId = 0;
+    QWORD accid = 0;
+};
+
+struct SRpcChannelMethodArgs        // method args
+{
+    bool bDelay {false};
+    ENUM::EServerType from {ENUM::ESERVERTYPE_MIN};
+    muduo::net::RpcChannelPtr rpcChannelPtr{nullptr};
+    QWORD msgId {0};
+    QWORD accid {0};
+};

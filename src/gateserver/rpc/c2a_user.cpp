@@ -9,11 +9,15 @@
 using namespace RPC;
 
 void C2A_UserService::C2A_UserSignIn(const ::CMD::C2A_UserSignInArgPtr& request,
-                                     const ::CMD::C2A_UserSignInResPtr& response) 
+                                     const ::CMD::C2A_UserSignInResPtr& response,
+                                     void* args) 
 {
     if (!request || !response) return;
     LOG_DEBUG << request->ShortDebugString();
-    RpcChannelPtr rpcChannelPtr = std::static_pointer_cast<muduo::net::RpcChannel>(GetRpcChannel());
+
+    SRpcChannelMethodArgs* pArgs = static_cast<SRpcChannelMethodArgs*>(args);
+    if (!pArgs) return ;
+    RpcChannelPtr rpcChannelPtr = pArgs->rpcChannelPtr;
     if (!rpcChannelPtr) return ;
 
     QWORD accid = request->accid();

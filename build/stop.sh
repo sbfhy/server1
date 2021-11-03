@@ -4,7 +4,7 @@ oldIFS=$IFS
 IFS='
 '
 
-getServerPids="ps -aux |grep $LOGNAME | grep Server | grep -v grep | grep -v vim |grep -v \"\-d\" "   # $LOGNAME是用户名，这行筛选出所有Server进程
+getServerPids="ps ux |grep Server |grep -v grep |grep -v vim" 
 
 for var in $(echo $getServerPids | bash) 
 do 

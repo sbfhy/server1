@@ -4,6 +4,7 @@
 #include "dynamic_object.h"
 #include "src/base/mgr/mgr_dynamicfactory.h"
 #include "service.h"
+#include "muduo/net/protorpc/RpcChannel.h"
 
 #include "service/service_enum.pb.h"
 #include <google/protobuf/message.h>
@@ -104,4 +105,40 @@ void MgrMessage::getServiceFromTo(const std::string& serviceTypeName, ENUM::ESer
     if (serviceTypeName.size() < 3) return;
     func(serviceTypeName[0], from);
     func(serviceTypeName[2], to);
+}
+
+SDelayResponse* MgrMessage::NewDelayResponse(const SRpcChannelMethodArgs& args)
+{
+    QWORD delayId = m_delayResponseId.incrementAndGet();
+    SDelayResponse* ret = nullptr;
+    {
+    muduo::MutexLockGuard lock(m_delayResponseMutex);
+    ret = &m_delayResponse[delayId];
+    }
+    ret->delayResponseId = delayId;
+    ret->accid = args.accid;
+    ret->msgId = args.msgId;
+    ret->rpcChannelPtr = args.rpcChannelPtr;
+    ret->from = args.from;
+    return ret;
+}
+
+void MgrMessage::DoDelayResponse(QWORD delayResponseId)
+{
+    SDelayResponse delayResponse;
+    {
+    muduo::MutexLockGuard lock(m_delayResponseMutex);
+    auto itFind = m_delayResponse.find(delayResponseId);
+    if (itFind == m_delayResponse.end())
+        return ;
+    delayResponse = itFind->second;
+    m_delayResponse.erase(itFind);
+    }
+    if (delayResponse.rpcChannelPtr)
+    {
+        delayResponse.rpcChannelPtr->DoneCallbackInIoLoop(delayResponse.response, 
+                                                          delayResponse.msgId, 
+                                                          delayResponse.accid, 
+                                                          delayResponse.from);
+    }
 }

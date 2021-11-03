@@ -15,7 +15,8 @@ class SudokuServiceImpl : public SudokuService
 {
 public:
   virtual void Solve(const ::sudoku::SudokuRequestPtr& request,
-                     const ::sudoku::SudokuResponsePtr& response)
+                     const ::sudoku::SudokuResponsePtr& response,
+                     void* args)
   {
     LOG_INFO << "SudokuServiceImpl::Solve";
     if (!response) return ;

@@ -12,7 +12,7 @@ public:
     G2C_SceneService_Stub() {}
 
     virtual void G2C_EnterScene_DoneCb(const ::CMD::G2C_EnterSceneArgPtr &request,
-                                       const ::CMD::G2C_EnterSceneResPtr &response) {}
+                                       const ::CMD::EmptyResponsePtr &response) {}
 
     virtual void G2C_EnterScene_TimeOut(const ::CMD::G2C_EnterSceneArgPtr &request) {}
 };

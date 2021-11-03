@@ -9,7 +9,8 @@ SudokuService::SudokuService()
 }
 
 void SudokuService::Solve(const ::sudoku::SudokuRequestPtr& request,
-                          const ::sudoku::SudokuResponsePtr& response)
+                          const ::sudoku::SudokuResponsePtr& response,
+                          void* args)
 {
     {LOG_DEBUG << request->ShortDebugString();}
     if (!response) return ;

@@ -4,8 +4,9 @@
 
 using namespace RPC;
 
-void C2G_SceneEntryService::C2G_CreateEntry(const ::CMD::C2G_CreateEntryArgPtr& request,
-                                            const ::CMD::C2G_CreateEntryResPtr& response)
+void C2G_SceneService::C2G_NotifyLoadedScene(const ::CMD::C2G_NotifyLoadedSceneArgPtr& request,
+                                             const ::CMD::EmptyResponsePtr& response,
+                                             void* args)
 {
     {LDBG("M_NET") << ""; }
 }

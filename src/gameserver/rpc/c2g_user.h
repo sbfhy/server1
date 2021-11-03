@@ -12,7 +12,8 @@ public:
     C2G_UserService() {}
 
     virtual void C2G_UserSignIn(const ::CMD::C2G_UserSignInArgPtr& request,
-                                const ::CMD::C2G_UserSignInResPtr& response) override;
+                                const ::CMD::C2G_UserSignInResPtr& response,
+                                void* args) override;
 
 };
 

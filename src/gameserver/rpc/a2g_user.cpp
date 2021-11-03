@@ -10,31 +10,27 @@
 using namespace RPC;
 
 void A2G_UserService::A2G_GateNotifyGame(const ::CMD::A2G_GateNotifyGameArgPtr& request,
-                                         const ::CMD::EmptyResponsePtr& response)
+                                         const ::CMD::EmptyResponsePtr& response,
+                                         void* args)
 {
     {LDBG("M_NET") << "Gate通知Game，连接上了";}
-    thisServer->SetGateRpcChannelPtr(std::dynamic_pointer_cast<muduo::net::RpcChannel>(GetRpcChannel()));
+    thisServer->SetGateRpcChannelPtr(static_cast<SRpcChannelMethodArgs*>(args)->rpcChannelPtr);
 }
 
 void A2G_UserService::A2G_UserSignIn(const ::CMD::A2G_UserSignInArgPtr& request,
-                                     const ::CMD::EmptyResponsePtr& response)
+                                     const ::CMD::EmptyResponsePtr& response,
+                                     void* args)
 {
     if (!request) return ;
     {LDBG("M_NET") << request->ShortDebugString();}
     
     QWORD accid = request->accid();
     MgrUser::Instance().UserSignIn(accid);
-
-    auto userPtr = MgrUser::Instance().GetUser(accid);
-    if (userPtr)
-    {
-        auto G2C_EnterSceneArgPtr = std::make_shared<CMD::G2C_EnterSceneArg>();
-        userPtr->Send(G2C_EnterSceneArgPtr);
-    }
 }
 
 void A2G_UserService::A2G_UserSignOut(const ::CMD::A2G_UserSignOutArgPtr& request,
-                                      const ::CMD::EmptyResponsePtr& response)
+                                      const ::CMD::EmptyResponsePtr& response,
+                                      void* args)
 {
     if (!request) return ;
     QWORD accid = request->accid();
