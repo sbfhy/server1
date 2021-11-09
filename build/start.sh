@@ -5,6 +5,8 @@ thisFileDir=$(cd `dirname $0`;pwd)                          # 这个文件目录
 source $thisFileDir/config_build
 cd $thisFileDir/$buildType/bin/
 
+mkdir -p log 
+
 ./GameServer & 
 echo "start GameServer"
 ./GateServer &

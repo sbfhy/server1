@@ -1,4 +1,4 @@
-#include "user.h"
+#include "src/gameserver/user/user.h"
 
 #include "src/gameserver/gameserver.h"
 

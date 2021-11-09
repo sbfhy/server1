@@ -36,13 +36,10 @@ private:
     TMapDescriptor2ServiceInfo m_mapRequest2ServiceInfo;
 
     // delay response,    FIXME: 非线程安全，只能在主线程中访问  
-    // QWORD m_delayId;                                // delay自增Id
-    // TMapQWORD2DelayInfo m_mapDelayId2DelayInfo;     // <delayId, DelayInfo>
 public:
     SDelayResponse* NewDelayResponse(const SRpcChannelMethodArgs& args);
     void DoDelayResponse(QWORD delayResponseId);
 protected:
-    // delay response
     muduo::AtomicInt64 m_delayResponseId;
     muduo::MutexLock m_delayResponseMutex;
     std::map<QWORD, SDelayResponse> m_delayResponse;

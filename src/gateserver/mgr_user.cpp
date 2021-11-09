@@ -45,6 +45,7 @@ void MgrUser::UserSignOut(xEntry* sender, const IVarList& varList)
     LOG_DEBUG << "用户下线, accid:" << accid;
     
     auto A2G_UserSignOutArgPtr = std::make_shared<CMD::A2G_UserSignOutArg>();
+    A2G_UserSignOutArgPtr->set_accid(accid);
     thisServer->SendToGame(A2G_UserSignOutArgPtr);
 }
 

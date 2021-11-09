@@ -65,6 +65,7 @@ void RpcChannel::Send(const ::google::protobuf::MessagePtr& request, QWORD accid
     message.set_from(serviceInfo->from);
     message.set_to(serviceInfo->to);
     message.set_accid(accid);
+    {LDBG("M_NET") << message.ShortDebugString() << "; " << request->ShortDebugString();}
     message.set_request(request->SerializeAsString());  // FIXME: error check
 
     OutstandingCall out = { request, 
@@ -76,7 +77,6 @@ void RpcChannel::Send(const ::google::protobuf::MessagePtr& request, QWORD accid
     m_outstandings[id] = out;
     }
 
-    {LDBG("M_NET") << message.ShortDebugString() << ", " << request->ShortDebugString();}
     m_codec.send(m_conn, message);
 }
 

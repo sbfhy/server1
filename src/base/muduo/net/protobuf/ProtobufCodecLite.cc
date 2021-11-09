@@ -36,6 +36,7 @@ void ProtobufCodecLite::send(const TcpConnectionPtr& conn,
   // FIXME: serialize to TcpConnection::outputBuffer()
   muduo::net::Buffer buf;
   fillEmptyBuffer(&buf, message);
+  {LDBG("M_NET") << "len:" << buf.readableBytes();}
   conn->send(&buf);
 }
 
