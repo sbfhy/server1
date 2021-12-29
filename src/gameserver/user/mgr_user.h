@@ -1,12 +1,11 @@
 #pragma once
 
 #include "src/base/common/singleton.h"
+#include "src/gameserver/user/define_user.h"
 
 #include <memory>
 #include <map>
 
-class User;
-typedef std::shared_ptr<User> UserPtr;
 
 class MgrUser : public Singleton<MgrUser>
 {

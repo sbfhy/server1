@@ -15,6 +15,9 @@ public:
                                        const ::CMD::EmptyResponsePtr& response,
                                        void* args) override;
 
+    virtual void C2G_MoveState(const ::CMD::C2G_MoveStateArgPtr& request,
+                               const ::CMD::EmptyResponsePtr& response,
+                               void* args) override;
 };
 
 }   // namespace RPC
